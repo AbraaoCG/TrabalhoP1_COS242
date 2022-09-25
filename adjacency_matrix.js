@@ -8,9 +8,9 @@ class Adjacency_matrix {
     read_file(txt) {
         try {
             const data = fs.readFileSync('input.txt', 'utf8');
-            console.log(type(data));
+            console.log(typeof(data));
             
-            nv = int(data[0])
+            let nv = parseInt(data[0])
             console.log(nv)
 
         } catch (err) {
@@ -21,6 +21,7 @@ class Adjacency_matrix {
 
 const myArray = new Adjacency_matrix("aa");
 myArray.read_file();
+
 
 
 /*const fs = require('fs');
