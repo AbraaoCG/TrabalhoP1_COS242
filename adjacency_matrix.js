@@ -9,20 +9,32 @@ class Adjacency_matrix {
         try {
             let data = fs.readFileSync('input.txt', 'utf8');
             
-            // Definir num. de vértices e tamanho da string com dados.
+            // Definir num. de vértices.
             this.n = parseInt(data[0])
-            let numCaract = 2 +  3 * this.n // linha inicial = 2 Caracteres("n "); Para cada Aresta = "X Y" = 3 Caracteres ; 
+
+            // retirar "n" dos dados e definir m(núm. de arestas).
             
-            //Criar nova
-            //console.log(data[numCaract - 1]) 
             data = data.slice(2)
-            console.log(data)
+            data = data.concat(" ") // Todas linhas tem 4 caracteres agora (A última tinha 3) 
+            this.m = ( (data.length ) /4  ) // cada linha de aresta contabiliza 4 caracteres.
 
-            //data = data.
-
-
-
-
+            //Inicializar Matrix com 2 iteraçõe (linha x Coluna)
+            let Matrix =  new Array(this.n)
+            for (let i = 0 ; i < this.n ; i++){
+                Matrix[i] = new Array(this.n)
+                for (let j = 0 ; j < this.n ; j++){
+                    Matrix[i][j] = 0
+                } 
+            }
+            // Preencher Matrix.
+            
+            for (let i = 0; i < this.m ; i++){
+                let v1 = parseInt(data[i * 4]) - 1  //Subtrai 1, pois vertice x, na matrix, é x-1 (0 - this.n - 1 )
+                let v2 = parseInt(data[i * 4 + 2]) - 1
+                Matrix[v1][v2] = 1 // Seto v1 --> v2
+                Matrix[v2][v1] = 1 // Seto v2 --> v1
+            }
+            console.log(Matrix)
 
         } catch (err) {
             console.error(err);
