@@ -5,13 +5,24 @@ class Adjacency_matrix {
         //this.n, this.m, this.matrix = this.read_input(txt);
     }
 
-    read_file(txt) {
+    Assembly_Matrix(txt) {
         try {
-            const data = fs.readFileSync('input.txt', 'utf8');
-            console.log(typeof(data));
+            let data = fs.readFileSync('input.txt', 'utf8');
             
-            let nv = parseInt(data[0])
-            console.log(nv)
+            // Definir num. de vértices e tamanho da string com dados.
+            this.n = parseInt(data[0])
+            let numCaract = 2 +  3 * this.n // linha inicial = 2 Caracteres("n "); Para cada Aresta = "X Y" = 3 Caracteres ; 
+            
+            //Criar nova
+            //console.log(data[numCaract - 1]) 
+            data = data.slice(2)
+            console.log(data)
+
+            //data = data.
+
+
+
+
 
         } catch (err) {
             console.error(err);
@@ -20,7 +31,7 @@ class Adjacency_matrix {
 }
 
 const myArray = new Adjacency_matrix("aa");
-myArray.read_file();
+myArray.Assembly_Matrix();
 
 
 
