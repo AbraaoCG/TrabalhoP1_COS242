@@ -50,7 +50,15 @@ class GraphStruct { // Classe Base para Grafos
             let v1 = parseInt(data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
             let v2 = parseInt(data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
             
-            this.buildAdjacencyMatrix(v1, v2);
+            switch(graphType) {
+                case 0:
+                    this.fillAdjacencyMatrix(v1, v2)
+                    break;
+                case 1: 
+                    break;
+                case 2:
+                    break;
+            }
 
             degreeArray[v1] += 1;
             degreeArray[v2] += 1;
@@ -83,16 +91,13 @@ class GraphStruct { // Classe Base para Grafos
         return [maxDegree, minDegree, averageDegree, medianDegree]
     }
 
-    buildAdjacencyMatrix(v1, v2) {
-        console.log(this)
-        console.log(v1,v2)
-
+    fillAdjacencyMatrix(v1, v2) {
         this.struct[v1][v2] = 1; // Seta v1 --> v2
         this.struct[v2][v1] = 1; // Seta v2 --> v1
     }
 
-    buildAdjacencyList(v1, v2) {}
-    buildAdjacencyVector(v1, v2) {}
+    fillAdjacencyList(v1, v2) {}
+    fillAdjacencyVector(v1, v2) {}
 }
 
 module.exports = GraphStruct; // Export class
