@@ -1,5 +1,5 @@
 const AdjacencyMatrix = require('./adjacencyMatrix');
-const GraphStruct = require('./graphStrucut');
+const GraphStruct = require('./graphStruct');
 
 class Graph { // Classe Base para Grafos
     constructor(inputPath, graphType) {
@@ -9,7 +9,7 @@ class Graph { // Classe Base para Grafos
     buildGraph(graphType, inputPath) {
         switch(graphType) {
             case 0:
-                return new GraphStruct(inputPath, graphType);
+                return new AdjacencyMatrix(inputPath, graphType);
             case 1: 
                 return 'Adjacency List';
             case 2:

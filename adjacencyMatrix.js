@@ -1,42 +1,9 @@
-const GraphStruct = require('./graphStrucut');
+const GraphStruct = require('./graphStruct');
 
 class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
-    constructor(inputPath) {
-        super(inputPath);
-        [this.matrix, this.degreeArray, this.degreeSum] = this.buildStruct();
+    constructor(inputPath, graphType) {
+        super(inputPath, graphType);
     } 
-
-    getInfo() {
-        // Inicializa matriz de zeros com 2 iterações (linha x Coluna)
-        let matrix =  new Array(this.n);
-        for (let i = 0 ; i < this.n ; i++){
-            matrix[i] = new Array(this.n)
-            for (let j = 0 ; j < this.n ; j++){
-                matrix[i][j] = 0;
-            } 
-        }
-        // Inicializa variável com a soma dos graus
-        let degreeSum = 0;
-        // Inializa variáveis com o 
-        // Inicializa vetor com o grau de cada vértice e variáveis com índice máximo e mínimo
-        let degreeArray = new Array(this.n);
-        for (let i = 0 ; i < this.n ; i++){
-            degreeArray[i] = 0;
-        }
-        
-        // Preenche Matrix, vetor de graus e a soma dos graus
-        for (let i = 1; i < this.m + 1 ; i++){
-            let v1 = parseInt(this.data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
-            let v2 = parseInt(this.data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
-            matrix[v1][v2] = 1; // Seta v1 --> v2
-            matrix[v2][v1] = 1; // Seta v2 --> v1
-            
-            degreeArray[v1] += 1;
-            degreeArray[v2] += 1;
-            degreeSum += 2;
-        }        
-        return [matrix, degreeArray, degreeSum];
-    }
 
     bfs(s) {
         // Desmarcar todos os vértices
