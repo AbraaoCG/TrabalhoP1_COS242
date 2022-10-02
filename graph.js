@@ -2,7 +2,7 @@ const AdjacencyMatrix = require('./adjacencyMatrix');
 
 class Graph { // Classe Base para Grafos
     constructor(inputPath, graphType) {
-        this.struct = this.buildGraph(graphType, inputPath);
+        this.representation = this.buildGraph(graphType, inputPath);
     } 
 
     buildGraph(graphType, inputPath) {
@@ -17,8 +17,8 @@ class Graph { // Classe Base para Grafos
     }
 }
 
-myGraph = new Graph("input.txt", 0)
-console.log(myGraph.struct)
+myGraph = new Graph("input.txt", 0);
+console.log(myGraph.representation.bfs(2));
 
 
 
