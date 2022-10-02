@@ -1,4 +1,3 @@
-const fs = require('fs');
 const AdjacencyMatrix = require('./adjacencyMatrix');
 
 class Graph { // Classe Base para Grafos
@@ -19,7 +18,7 @@ class Graph { // Classe Base para Grafos
 }
 
 myGraph = new Graph("input.txt", 0)
-console.log(myGraph.struct.bfs(2))
+console.log(myGraph)
 
 
 
