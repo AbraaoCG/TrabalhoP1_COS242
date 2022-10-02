@@ -1,5 +1,4 @@
 const AdjacencyMatrix = require('./adjacencyMatrix');
-const GraphStruct = require('./graphStruct');
 
 class Graph { // Classe Base para Grafos
     constructor(inputPath, graphType) {
