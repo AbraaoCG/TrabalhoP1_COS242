@@ -1,4 +1,5 @@
 const fs = require('fs');
+const os = require('os');
 
 class GraphStruct { // Classe Base para Grafos
     constructor(inputPath, graphType) {
@@ -27,8 +28,15 @@ class GraphStruct { // Classe Base para Grafos
 
     readInput(inputPath, graphType) {
         let data = fs.readFileSync(inputPath, 'utf8'); // Faz a leitura do arquivo de input
-        data = data.split(/\r\n/); // Armazena cada linha do arquivo em um vetor
-    
+        //Detalhe: Em ambientes Windows, percebemos que a quebra de linha é feita com o identificador \r\n, enquanto no Linux isso é feito apenas com \n
+        if( os.platform() === 'win32'){ 
+            data = data.split(/\r\n/);
+        }
+        else{
+            data = data.split(/\n/); // Armazena cada linha do arquivo em um vetor
+        }
+
+        
         // Define num. de vértices
         const n = parseInt(data[0]);
         // Define num. de arestas
@@ -100,4 +108,9 @@ class GraphStruct { // Classe Base para Grafos
     fillAdjacencyVector(v1, v2) {}
 }
 
+
+
+
+
 module.exports = GraphStruct; // Export class
+
