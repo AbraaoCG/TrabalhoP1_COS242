@@ -18,3 +18,5 @@ for (let i = 0 ; i < n ; i++){
 for (let i = 1; i < this.m + 1 ; i++){
     let v1 = parseInt(this.data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
     let v2 = parseInt(this.data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
+
+

@@ -1,4 +1,4 @@
-const GraphStruct = require('./graphStrcut');
+const GraphStruct = require('./graphStrucut');
 
 class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
     constructor(inputPath) {
@@ -6,7 +6,7 @@ class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
         [this.matrix, this.degreeArray, this.degreeSum] = this.buildStruct();
     } 
 
-    buildStruct() {
+    getInfo() {
         // Inicializa matriz de zeros com 2 iterações (linha x Coluna)
         let matrix =  new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
@@ -17,6 +17,7 @@ class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
         }
         // Inicializa variável com a soma dos graus
         let degreeSum = 0;
+        // Inializa variáveis com o 
         // Inicializa vetor com o grau de cada vértice e variáveis com índice máximo e mínimo
         let degreeArray = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
@@ -35,28 +36,6 @@ class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
             degreeSum += 2;
         }        
         return [matrix, degreeArray, degreeSum];
-    }
-
-    getDegreeInfo() {
-        // Tornar mais eficiente: https://stackoverflow.com/questions/1063007/how-to-sort-an-array-of-integers-correctly
-        const sortedDegreeArray = this.degreeArray.sort(function(a, b) {
-            return a - b;
-        });
-
-        const maxDegree = sortedDegreeArray[this.n - 1]; // Subtraimos 1 porque o índice da lista inicia pelo zero
-        const minDegree = sortedDegreeArray[0];
-        const averageDegree = this.degreeSum / this.n;
-
-        let medianDegree;
-        const i = Math.floor(sortedDegreeArray.length / 2); // Divide o comprimento do array por 2. Se for decimal, arredonda para baixo
-        if (this.n % 2 === 0) { // Se o número de elementos é par
-            // A mediana será a soma dos dois índices ao centro dividido por 2
-            medianDegree = ((sortedDegreeArray[i]) + (sortedDegreeArray[i - 1])) / 2; 
-        } else { // Se é ímpar
-            medianDegree = sortedDegreeArray[i]; // A mediana será igual ao elemento do centro
-        }; 
-
-        return [sortedDegreeArray, maxDegree, minDegree, averageDegree, medianDegree]
     }
 
     bfs(s) {

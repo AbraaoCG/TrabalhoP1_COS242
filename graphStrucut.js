@@ -1,12 +1,31 @@
 const fs = require('fs');
 
 class GraphStruct { // Classe Base para Grafos
-    constructor(inputPath) {
-        [this.n, this.m, this.degreeArray, this.degreeSum] = this.readInput(inputPath);
-        [this.maxDegree, this.minDegree, this.averageDegree, this.medianDegree] = getDegreeInfo();
+    constructor(inputPath, graphType) {
+        [this.n, this.m, this.degreeArray, this.degreeSum] = this.readInput(inputPath, graphType);
+        [this.maxDegree, this.minDegree, this.averageDegree, this.medianDegree] = this.getDegreeInfo();
     }
 
-    readInput(inputPath) {
+    buildInitialStruct(graphType, n) {
+        switch(graphType) {
+            case 0:
+                // Inicializa matriz de zeros com 2 iterações (linha x Coluna)
+                this.struct =  new Array(n);
+                for (let i = 0 ; i < n ; i++){
+                    this.struct[i] = new Array(n)
+                    for (let j = 0 ; j < n ; j++){
+                        this.struct[i][j] = 0;
+                    } 
+                }
+                break;
+            case 1: 
+                break;
+            case 2:
+                break;
+        }
+    }
+
+    readInput(inputPath, graphType) {
         let data = fs.readFileSync(inputPath, 'utf8'); // Faz a leitura do arquivo de input
         data = data.split(/\r\n/); // Armazena cada linha do arquivo em um vetor
     
@@ -17,18 +36,22 @@ class GraphStruct { // Classe Base para Grafos
         
         // Inicializa variável com a soma dos graus
         let degreeSum = 0;
-        // Inializa variáveis com o 
         // Inicializa vetor com o grau de cada vértice e variáveis com índice máximo e mínimo
-        let degreeArray = new Array(this.n);
-        for (let i = 0 ; i < this.n ; i++){
+        let degreeArray = new Array(n);
+        for (let i = 0 ; i < n ; i++) {
             degreeArray[i] = 0;
         }
 
+        // Constrói a estrutura inicial para cada uma das representações
+        this.buildInitialStruct(graphType, n);
+
         // Preenche Matrix, vetor de graus e a soma dos graus
-        for (let i = 1; i < this.m + 1 ; i++){
-            let v1 = parseInt(this.data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
-            let v2 = parseInt(this.data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
+        for (let i = 1; i < m + 1 ; i++) {
+            let v1 = parseInt(data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
+            let v2 = parseInt(data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
             
+            this.buildAdjacencyMatrix(v1, v2);
+
             degreeArray[v1] += 1;
             degreeArray[v2] += 1;
             degreeSum += 2;
@@ -59,6 +82,17 @@ class GraphStruct { // Classe Base para Grafos
 
         return [maxDegree, minDegree, averageDegree, medianDegree]
     }
+
+    buildAdjacencyMatrix(v1, v2) {
+        console.log(this)
+        console.log(v1,v2)
+
+        this.struct[v1][v2] = 1; // Seta v1 --> v2
+        this.struct[v2][v1] = 1; // Seta v2 --> v1
+    }
+
+    buildAdjacencyList(v1, v2) {}
+    buildAdjacencyVector(v1, v2) {}
 }
 
 module.exports = GraphStruct; // Export class
