@@ -18,7 +18,7 @@ class Graph { // Classe Base para Grafos
 }
 
 myGraph = new Graph("input.txt", 0);
-console.log(myGraph.representation.bfs(2));
+console.log(myGraph.representation.bfs(1));
 
 
 
