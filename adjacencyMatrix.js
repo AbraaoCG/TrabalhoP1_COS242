@@ -5,7 +5,7 @@ class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
         super(inputPath, graphType);
     } 
 
-    bfs(s) {
+    /*bfs(s) {
         // Desmarcar todos os vértices
         let markupVector = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
@@ -35,7 +35,7 @@ class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
         }
 
         return q;
-    }
+    }*/
 }
 
 
