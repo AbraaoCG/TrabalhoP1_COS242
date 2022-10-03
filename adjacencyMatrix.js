@@ -36,6 +36,34 @@ class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
 
         return q;
     }
+    dfs(s){
+        let markupVector = new Array(this.n);
+        for (let i = 0 ; i < this.n ; i++){
+            markupVector[i] = 0;
+        }
+        // Definir pilha Q vazia
+        let q = [];
+        markupVector[s - 1] = 1;
+        q.push(s - 1);
+
+        while (q.length !== 0) { // Enquanto Q não estiver vazia
+            let v = q.pop();
+            console.log(v + 1);
+            
+            // Para percorrer os vizinhos, percorremos todos os elementos da matriz de adjacência, caso o registro seja 0 não é vizinho, caso seja 1, é vizinho.
+            // Está percorrendo a linha inteira da matriz
+            for (let w = 0 ; w < this.n ; w++){
+                if (this.struct[v][w] === 1) {
+                    if (markupVector[w] === 0) { // Se w não estiver marcado
+                        markupVector[w] = 1;
+                        q.push(w);
+                    }
+                }
+            }
+        }        
+    
+    return q;
+    }
 }
 
 module.exports = AdjacencyMatrix; // Export class

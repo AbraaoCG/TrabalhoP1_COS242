@@ -23,18 +23,46 @@ class AdjacencyList extends GraphStruct { // Classe Base para Grafos
             console.log(v);
 
             // Para percorrer os vizinhos, basta percorrer a lista de adjacência de cada vertice v
-            let w = this.struct[v].head
-            while(w != null){
-                
+            let w = this.struct[v].head;
+            while(w != null){   
                 // Preciso verificar se esse vizinho não foi marcado (Lembrando que na lista de adjacência implementada o nó 1 é guardado como 1, e não como 0. )
                 if (markupVector[w.data - 1] === 0) { // Se w não estiver marcado
                     markupVector[w.data - 1] = 1;
                     q.push(w.data - 1);
                     }
-                w = w.next
-                }
+                w = w.next;
+            }
             }
         return q;
+    }
+
+    dfs(s){
+        let markupVector = new Array(this.n);
+        for (let i = 0 ; i < this.n ; i++){
+            markupVector[i] = 0;
+        }
+        // Definir pilha Q vazia
+        let q = [];
+        markupVector[s - 1] = 1;
+        q.push(s - 1);
+
+        while (q.length !== 0) { // Enquanto Q não estiver vazia
+            let v = q.pop();
+            console.log(v + 1);
+            
+            // Para percorrer os vizinhos, basta percorrer a lista de adjacência de cada vertice v
+            let w = this.struct[v].head;
+            while(w != null){   
+                // Preciso verificar se esse vizinho não foi marcado (Lembrando que na lista de adjacência implementada o nó 1 é guardado como 1, e não como 0. )
+                if (markupVector[w.data - 1] === 0) { // Se w não estiver marcado
+                    markupVector[w.data - 1] = 1;
+                    q.push(w.data - 1);
+                    }
+                w = w.next;
+            }
+        }        
+    
+    return q;
     }
     
 }
