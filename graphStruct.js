@@ -1,5 +1,7 @@
 const fs = require('fs');
 const os = require('os');
+const LinkedList = require('./linkedList.js')
+
 
 class GraphStruct { // Classe Base para Grafos
     constructor(inputPath, graphType) {
@@ -19,9 +21,17 @@ class GraphStruct { // Classe Base para Grafos
                     } 
                 }
                 break;
-            case 1: 
+            case 1:
+                this.struct = new Array(n);
+                for (let i = 0 ; i < n ; i++){
+                    this.struct[i] = new LinkedList();
+                }
                 break;
             case 2:
+                this.struct = new Array(n);
+                for (let i = 0 ; i < n ; i++){
+                    this.struct[i] = []
+                }
                 break;
         }
     }
@@ -53,18 +63,20 @@ class GraphStruct { // Classe Base para Grafos
         // Constrói a estrutura inicial para cada uma das representações
         this.buildInitialStruct(graphType, n);
 
-        // Preenche Matrix, vetor de graus e a soma dos graus
+        // Preenche uma das tres Estruturas, vetor de graus e a soma dos graus
         for (let i = 1; i < m + 1 ; i++) {
             let v1 = parseInt(data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
             let v2 = parseInt(data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
             
-            switch(graphType) {
+            switch(graphType) { // Cada estrutura de dados preenchida com um metodo proprio 
                 case 0:
-                    this.fillAdjacencyMatrix(v1, v2)
+                    this.fillAdjacencyMatrix(v1, v2);
                     break;
-                case 1: 
+                case 1:
+                    this.fillAdjacencyList(v1,v2);
                     break;
                 case 2:
+                    this.fillAdjacencyVector(v1,v2);
                     break;
             }
 
@@ -78,7 +90,7 @@ class GraphStruct { // Classe Base para Grafos
 
     getDegreeInfo() {
         // Tornar mais eficiente: https://stackoverflow.com/questions/1063007/how-to-sort-an-array-of-integers-correctly
-        // sort(Object[]) is based on the TimSort algorithm, giving us a time complexity of O(n log(n)).
+        // Funcao usada para ordenacao (.sort(f)) utiliza algoritmo Timsort, com complexidade O (nlogn) 
         const sortedDegreeArray = this.degreeArray.sort(function(a, b) {
             return a - b;
         });
@@ -104,8 +116,14 @@ class GraphStruct { // Classe Base para Grafos
         this.struct[v2][v1] = 1; // Seta v2 --> v1
     }
 
-    fillAdjacencyList(v1, v2) {}
-    fillAdjacencyVector(v1, v2) {}
+    fillAdjacencyList(v1, v2) {
+        this.struct[v1].append(v2 + 1); // Adiciona v2 a lista de Adj de v1
+        this.struct[v2].append(v1 + 1); // Adiciona v1 a lista de Adj de v2
+    }
+    fillAdjacencyVector(v1, v2) {
+        this.struct[v1].push(v2 + 1); // Adiciona v2 a lista de Adj de v1
+        this.struct[v2].push(v1 + 1); // Adiciona v1 a lista de Adj de v2
+    }
 }
 
 
