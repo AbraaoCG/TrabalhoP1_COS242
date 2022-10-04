@@ -1,5 +1,71 @@
+BFS 
+
+matrix
+
 
 --- Ouput BFS ---
+Nível 0: Vértice 1 (raíz)
+Nível 1: Vértice 2 (pai: 1)
+Nível 1: Vértice 3 (pai: 1)
+Nível 1: Vértice 4 (pai: 1)
+Nível 2: Vértice 6 (pai: 2)
+Nível 2: Vértice 7 (pai: 4)
+Nível 3: Vértice 5 (pai: 6)
+
+list 
+
+
+--- Ouput BFS ---
+Nível 0: Vértice 1 (raíz)
+Nível 1: Vértice 2 (pai: 1)
+Nível 1: Vértice 3 (pai: 1)
+Nível 1: Vértice 4 (pai: 1)
+Nível 2: Vértice 6 (pai: 2)
+Nível 2: Vértice 7 (pai: 4)
+Nível 3: Vértice 5 (pai: 6)
+
+vector
+
+
+--- Ouput BFS ---
+Nível 0: Vértice 1 (raíz)
+Nível 1: Vértice 2 (pai: 1)
+Nível 1: Vértice 3 (pai: 1)
+Nível 1: Vértice 4 (pai: 1)
+Nível 2: Vértice 6 (pai: 2)
+Nível 2: Vértice 7 (pai: 4)
+Nível 3: Vértice 5 (pai: 6)
+
+
+
+DFS
+
+matrix
+
+
+Nível 0: Vértice 1 (raíz)
+Nível 1: Vértice 2 (pai: 1)
+Nível 1: Vértice 3 (pai: 1)
+Nível 1: Vértice 4 (pai: 1)
+Nível 2: Vértice 7 (pai: 4)
+Nível 3: Vértice 5 (pai: 7)
+Nível 3: Vértice 6 (pai: 7)
+
+list 
+
+
+--- Ouput DFS ---
+Nível 0: Vértice 1 (raíz)
+Nível 1: Vértice 2 (pai: 1)
+Nível 1: Vértice 3 (pai: 1)
+Nível 1: Vértice 4 (pai: 1)
+Nível 2: Vértice 7 (pai: 4)
+Nível 3: Vértice 6 (pai: 7)
+Nível 3: Vértice 5 (pai: 7)
+
+vector
+
+
 Nível 0: Vértice 1 (raíz)
 Nível 1: Vértice 2 (pai: 1)
 Nível 1: Vértice 3 (pai: 1)

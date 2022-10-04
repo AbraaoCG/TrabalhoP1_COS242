@@ -44,7 +44,7 @@ class AdjacencyList extends GraphStruct { // Classe Base para Grafos
     }
 
     dfs(s){
-        this.writeOutput(['--- Ouput BFS ---'])
+        this.writeOutput(['--- Ouput DFS ---'])
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
@@ -70,7 +70,7 @@ class AdjacencyList extends GraphStruct { // Classe Base para Grafos
                     q.push(w.data - 1);
                     // Imprime o nó e o pai do nó descoberto (será aquele que o encontrou, isto é, o vértice "v")
                     this.writeOutput([`Nível ${markupVector[w.data - 1]}: `, `Vértice ${w.data} (pai: ${v + 1})`]) 
-                    
+
                     }
                 w = w.next;
             }
