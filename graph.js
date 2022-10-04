@@ -24,7 +24,8 @@ class Graph { // Classe Base para Grafos
 //myGraph = new Graph("input.txt", 2);
 //console.log(myGraph.representation.struct);
 myGraph2 = new Graph("input.txt", 0);
-console.log(myGraph2.representation.bfs(1));
+console.log(myGraph2.representation.bfs(2));
+
 
 
 
