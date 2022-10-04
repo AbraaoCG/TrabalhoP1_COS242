@@ -1,4 +1,5 @@
 const GraphStruct = require('./graphStruct');
+const LinkedList = require('./linkedList.js')
 
 class AdjacencyList extends GraphStruct { // Classe Base para Grafos
     constructor(inputPath, graphType) {
