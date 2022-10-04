@@ -8,6 +8,13 @@ class GraphStruct { // Classe Base para Grafos
         [this.n, this.m, this.degreeArray, this.degreeSum] = this.readInput(inputPath, graphType);
         [this.maxDegree, this.minDegree, this.averageDegree, this.medianDegree] = this.getDegreeInfo();
     }
+ 
+    writeOutput(textList) { // Função que escreve no arquivo output.txt
+        fs.appendFileSync('output.txt', '\n');
+        for (let i = 0; i < textList.length; i++) {
+            fs.appendFileSync('output.txt', `${textList[i]}`);
+          }        
+    }
 
     buildInitialStruct(graphType, n) {
         switch(graphType) {
