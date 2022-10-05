@@ -31,23 +31,11 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
     }
 
     dfs(s){
-        this.writeOutput(['--- Ouput DFS ---'])
-        // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
-        let markupVector = new Array(this.n);
-        for (let i = 0 ; i < this.n ; i++){
-            markupVector[i] = -1;
-        }
-        // Definir pilha Q vazia
-        let q = [];
-        markupVector[s - 1] = 0;
-        q.push(s - 1);
-
-        this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
+        let [q, markupVector] = super.dfs(s); 
 
         while (q.length !== 0) { // Enquanto Q não estiver vazia
-            let v = q.pop();
-            console.log(v + 1);
-            
+            let v = q.shift();
+
             // Para percorrer os vizinhos, basta percorrer a lista de adjacência de cada vertice v
             let w = this.struct[v].head;
             while(w != null){   
@@ -61,9 +49,9 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
                     }
                 w = w.next;
             }
-        }        
-    
-    return q;
+        }
+
+        return markupVector;
     }
     
 }

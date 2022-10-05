@@ -170,38 +170,28 @@ class Graph { // Classe Base para Grafos
 
         // Definir pilha Q vazia
         let q = [];
-        // Marcar s e inserir s na fila Q
+        // Marcar s e inserir s na pilha Q
         markupVector[s - 1] = 0; // Subtraimos 1 porque o índice do vetor começa em zero
         q.push(s - 1); // Subtraimos 1 porque o índice dos vértices na matriz começa em zero
 
         this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
         
-        while (q.length !== 0) { // Enquanto Q não estiver vazia
-            let v = q.pop(); // Retirar v de Q
-            
-            // Para percorrer os vizinhos, percorremos todos os elementos da matriz de adjacência, caso o registro seja 0 não é vizinho, caso seja 1, é vizinho.
-            // Está percorrendo a linha inteira da matriz
-            for (let w = 0 ; w < this.n ; w++){
-                if (this.struct[v][w] === 1) {
-                    if (markupVector[w] === -1) { // Se w não estiver marcado
-                        markupVector[w] = markupVector[v] + 1; // O nó "w" que é filho do nó "v", terá 1 nível a mais que "v"
-                        q.push(w);
-                        
-                        // Imprime o nó e o pai do nó descoberto (será aquele que o encontrou, isto é, o vértice "v")
-                        // Adicionamos 1 aos vértices porque o índice dos vértices na matriz começa em zero
-                        this.writeOutput([`Nível ${markupVector[w]}: `, `Vértice ${w + 1} (pai: ${v + 1})`]) 
-
-                    }
-                }
-            }
-        }        
-    
-        return markupVector;
+        // O loop funciona de forma distinta para cada uma das estruturas, por isso estão definidos em cada uma das subclasses
+        return [q, markupVector];
     }
 
     distance(u, v) {
         const layers = this.bfs(u); // Definindo origem como vértice "u" (poderia ser "v" também)
         return layers[v - 1]; // Vértices pertencentes a camada Li têm distância i da origem
+    }
+
+    diameter() {
+        let max = 0;
+        for (let v = 1 ; v <= this.n ; v++) { // É necessário executar a bfs para cada vértice 
+            let layers = this.bfs(v).sort((a, b) => b - a); // Ordenando distâncias para o vértice "v" (decresente)
+            max = (layers[0] > max) ? layers[0] : max; // O diâmetro será maior distância entre qualquer par de vértices do grafo
+        }
+        return max;
     }
 }
 

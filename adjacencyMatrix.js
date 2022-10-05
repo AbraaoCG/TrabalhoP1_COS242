@@ -28,6 +28,30 @@ class AdjacencyMatrix extends Graph { // Classe Base para Grafos
 
         return markupVector;
     }
+
+    dfs(s) {
+        let [q, markupVector] = super.dfs(s);
+
+        while (q.length !== 0) { // Enquanto Q não estiver vazia
+            let v = q.pop();
+            
+            // Para percorrer os vizinhos, percorremos todos os elementos da matriz de adjacência, caso o registro seja 0 não é vizinho, caso seja 1, é vizinho.
+            // Está percorrendo a linha inteira da matriz
+            for (let w = 0 ; w < this.n ; w++){
+                if (this.struct[v][w] === 1) {
+                    if (markupVector[w] === -1) { // Se w não estiver marcado
+                        markupVector[w] = markupVector[v] + 1;
+                        q.push(w);
+                        // Imprime o nó e o pai do nó descoberto (será aquele que o encontrou, isto é, o vértice "v")
+                        this.writeOutput([`Nível ${markupVector[w]}: `, `Vértice ${w + 1} (pai: ${v + 1})`]) 
+
+                    }
+                }
+            }
+        }
+
+        return markupVector;
+    }
 }
 
 module.exports = AdjacencyMatrix; // Export class
