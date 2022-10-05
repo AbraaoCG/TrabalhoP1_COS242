@@ -2,7 +2,7 @@ class LinkedList {
     constructor(v0 = null) {
         this.head = v0 === null ? null : new ListNode(v0)
         this.last = this.head
-        this.size = v0 === null ? 0 : 1
+        this.length = v0 === null ? 0 : 1
     }
 
     append(v){
@@ -13,7 +13,7 @@ class LinkedList {
             this.last.next = new ListNode(v) 
             this.last = this.last.next 
         }
-        this.size++
+        this.length++
     }
 }
 

@@ -3,9 +3,9 @@ const AdjacencyList = require('./adjacencyList');
 const AdjacencyVector = require('./adjacencyVector');
 const input = 'input.txt'
 
-myGraph = new AdjacencyMatrix(input);
+myGraph = new AdjacencyVector(input);
 console.log(myGraph.getGraphInfo());
-console.log(myGraph.bfs(1));
+console.log(myGraph.bfs(2));
 
 
 
