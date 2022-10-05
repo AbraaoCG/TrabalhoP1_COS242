@@ -6,7 +6,9 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
     } 
 
     bfs(s) {
-        let [q, markupVector] = super.bfs(s);
+        //BFS herdada de graph.js tem comandos que servem para todas as estrutura de dados. 
+        //'q' é a pilha/fila de nós descobertos não explorados. MakupVector acompanha se o o vertice já foi explorado(!= -1) e guarda a camada do vertice durante a exploração.
+        let [q, markupVector,maxLayer] = super.bfs(s);
 
         while (q.length !== 0) { // Enquanto Q não estiver vazia
             let v = q.shift(); // Retirar v de Q
@@ -18,7 +20,9 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
                 if (markupVector[w.data - 1] === -1) { // Se w não estiver marcado
                     markupVector[w.data - 1] = markupVector[v] + 1; // O nó "w" que é filho do nó "v", terá 1 nível a mais que "v"
                     q.push(w.data - 1);
-
+                    // Acompanho a maior camada enquanto busco
+                    if (maxLayer < markupVector[w.data - 1]) maxLayer = markupVector[w.data - 1];
+                    
                     // Imprime o nó e o pai do nó descoberto (será aquele que o encontrou, isto é, o vértice "v")
                     this.writeOutput([`Nível ${markupVector[w.data - 1]}: `, `Vértice ${w.data} (pai: ${v + 1})`]) 
 
@@ -27,11 +31,14 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
             }
         }
 
-        return markupVector;
+        return [markupVector,maxLayer];
     }
 
     dfs(s){
-        let [q, markupVector] = super.dfs(s); 
+
+        //DFS herdada de graph.js tem comandos que servem para todas as estrutura de dados. ()
+        //'q' é a pilha/fila de nós descobertos não explorados. MakupVector acompanha se o o vertice já foi explorado(!= -1) e guarda a camada do vertice durante a exploração.
+        let [q, markupVector,maxLayer] = super.dfs(s); 
 
         while (q.length !== 0) { // Enquanto Q não estiver vazia
             let v = q.shift();
@@ -43,15 +50,17 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
                 if (markupVector[w.data - 1] === -1) { // Se w não estiver marcado
                     markupVector[w.data - 1] = markupVector[v] + 1;
                     q.push(w.data - 1);
+                    // Acompanho a maior camada enquanto busco
+                    if (maxLayer < markupVector[w.data - 1]) maxLayer = markupVector[w.data - 1];
+
                     // Imprime o nó e o pai do nó descoberto (será aquele que o encontrou, isto é, o vértice "v")
                     this.writeOutput([`Nível ${markupVector[w.data - 1]}: `, `Vértice ${w.data} (pai: ${v + 1})`]) 
-
                     }
                 w = w.next;
             }
         }
 
-        return markupVector;
+        return [markupVector,maxLayer];
     }
     
 }

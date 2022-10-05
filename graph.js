@@ -147,7 +147,8 @@ class Graph { // Classe Base para Grafos
         for (let i = 0 ; i < this.n ; i++){
             markupVector[i] = -1;
         }
-
+        //Definir maxLayer, que será a maior camada gerada na Busca.
+        let maxLayer = 0
         // Definir fila Q vazia
         let q = [];
         // Marcar s e inserir s na fila Q
@@ -157,7 +158,7 @@ class Graph { // Classe Base para Grafos
         this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
 
         // O loop funciona de forma distinta para cada uma das estruturas, por isso estão definidos em cada uma das subclasses
-        return [q, markupVector];
+        return [q, markupVector,maxLayer];
     }
 
     dfs(s){
@@ -167,7 +168,8 @@ class Graph { // Classe Base para Grafos
         for (let i = 0 ; i < this.n ; i++){
             markupVector[i] = -1;
         }
-
+        //Definir maxLayer, que será a maior camada gerada na Busca.
+        let maxLayer = 0
         // Definir pilha Q vazia
         let q = [];
         // Marcar s e inserir s na pilha Q
@@ -177,19 +179,21 @@ class Graph { // Classe Base para Grafos
         this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
         
         // O loop funciona de forma distinta para cada uma das estruturas, por isso estão definidos em cada uma das subclasses
-        return [q, markupVector];
+        return [q, markupVector,maxLayer];
     }
 
     distance(u, v) {
-        const layers = this.bfs(u); // Definindo origem como vértice "u" (poderia ser "v" também)
+        const layers = this.bfs(u)[0]; // Definindo origem como vértice "u" (poderia ser "v" também)
         return layers[v - 1]; // Vértices pertencentes a camada Li têm distância i da origem
     }
 
     diameter() {
+        // O diâmetro será maior distância entre qualquer par de vértices do grafo, sendo que a maior distância entre v e um vértice qualquer é retornada pela BFS.
+        // Então, realizamos uma BFS em cada vértice, e escolhemos a maior distância (v,u) como diâmetro
         let max = 0;
         for (let v = 1 ; v <= this.n ; v++) { // É necessário executar a bfs para cada vértice 
-            let layers = this.bfs(v).sort((a, b) => b - a); // Ordenando distâncias para o vértice "v" (decresente)
-            max = (layers[0] > max) ? layers[0] : max; // O diâmetro será maior distância entre qualquer par de vértices do grafo
+            let currentMax = this.bfs(v)[1]
+            max = (currentMax > max) ? currentMax : max 
         }
         return max;
     }
