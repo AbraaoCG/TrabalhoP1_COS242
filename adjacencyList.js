@@ -31,7 +31,7 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
             }
         }
 
-        return [markupVector,maxLayer];
+        return [markupVector, maxLayer];
     }
 
     dfs(s){
@@ -60,7 +60,7 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
             }
         }
 
-        return [markupVector,maxLayer];
+        return [markupVector, maxLayer];
     }
     
 }

@@ -158,7 +158,7 @@ class Graph { // Classe Base para Grafos
         this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
 
         // O loop funciona de forma distinta para cada uma das estruturas, por isso estão definidos em cada uma das subclasses
-        return [q, markupVector,maxLayer];
+        return [q, markupVector, maxLayer];
     }
 
     dfs(s){
@@ -179,7 +179,7 @@ class Graph { // Classe Base para Grafos
         this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
         
         // O loop funciona de forma distinta para cada uma das estruturas, por isso estão definidos em cada uma das subclasses
-        return [q, markupVector,maxLayer];
+        return [q, markupVector, maxLayer];
     }
 
     distance(u, v) {
@@ -196,6 +196,47 @@ class Graph { // Classe Base para Grafos
             max = (currentMax > max) ? currentMax : max 
         }
         return max;
+    }
+
+    convexComponents() {
+        // Vetor de marcação para vértices que já estão em uma componente conexa já identificada
+        let markupVector = new Array(this.n);
+        for (let i = 0 ; i < this.n ; i++){
+            markupVector[i] = 0;
+        }
+        // Vetor que armazena as componentes conexas
+        let components = [];
+        // Declaração dos vetores para armazenar o vetor de marcação da bfs e a nova componente
+        // conexa identificada a cada iteração
+        let layers;
+        let newComponent;
+
+        // Itera sobre o vetor de marcação
+        for (let i = 0; i < markupVector.length; i++) {
+            newComponent = [];
+            // Se o vértice não estiver quer dizer que não está em uma componente conexa já identificada,
+            // logo, é necessário aplicar a bfs para identificar uma nova componente
+            if (markupVector[i] === 0) { layers = this.bfs(i + 1)[0] } 
+            else { layers = [] };
+
+            // Iteramos sobre o vetor de marcação da bfs
+            for (let k = 0; k < layers.length; k++) {
+                if (layers[k] !== -1) { 
+                    // Se o vértice não estiver marcado da bfs, adicionamos ele a nova componente conexa e 
+                    // fazemos sua marcação
+                    newComponent.push(k + 1); 
+                    markupVector[k] = 1;
+                }
+            }
+
+            // Adicionamos a nova componente conexa ao vetor de componentes conexas
+            if (newComponent.length !== 0) { components.push(newComponent) };
+        }
+
+        // Retorna componentes em ordem decrescente de tamanho 
+        return components.sort(function(a, b){
+            return b.length - a.length;
+        });
     }
 }
 

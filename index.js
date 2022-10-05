@@ -4,9 +4,7 @@ const AdjacencyVector = require('./adjacencyVector');
 const input = 'input.txt'
 
 myGraph = new AdjacencyMatrix(input);
-console.log(myGraph.getGraphInfo());
-console.log(myGraph.bfs(2));
-console.log(myGraph.diameter())
+console.log(myGraph.convexComponents())
 
 
 

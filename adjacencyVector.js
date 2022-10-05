@@ -29,7 +29,7 @@ class AdjacencyVector extends Graph { // Classe Base para Grafos
             }     
         }
             
-        return [markupVector,maxLayer];
+        return [markupVector, maxLayer];
     }
 
     dfs(s){
@@ -58,7 +58,7 @@ class AdjacencyVector extends Graph { // Classe Base para Grafos
             }     
         }
 
-        return [markupVector,maxLayer];
+        return [markupVector, maxLayer];
     }
 }
 

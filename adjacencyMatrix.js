@@ -8,7 +8,7 @@ class AdjacencyMatrix extends Graph { // Classe Base para Grafos
     bfs(s) {
         //BFS herdada de graph.js tem comandos que servem para todas as estrutura de dados. 
         //'q' é a pilha/fila de nós descobertos não explorados. MakupVector acompanha se o o vertice já foi explorado(!= -1) e guarda a camada do vertice durante a exploração.
-        let [q, markupVector,maxLayer] = super.bfs(s);
+        let [q, markupVector ,maxLayer] = super.bfs(s);
 
         while (q.length !== 0) { // Enquanto Q não estiver vazia
             let v = q.shift(); // Retirar v de Q
@@ -30,7 +30,7 @@ class AdjacencyMatrix extends Graph { // Classe Base para Grafos
             }
         }
 
-        return [markupVector,maxLayer];
+        return [markupVector, maxLayer];
     }
 
     dfs(s) {
@@ -59,7 +59,7 @@ class AdjacencyMatrix extends Graph { // Classe Base para Grafos
             }
         }
 
-        return [markupVector,maxLayer];
+        return [markupVector, maxLayer];
     }
 }
 
