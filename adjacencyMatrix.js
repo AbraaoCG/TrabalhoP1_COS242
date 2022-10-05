@@ -1,11 +1,11 @@
-const GraphStruct = require('./graphStruct');
+const Graph = require('./graph');
 
-class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
-    constructor(inputPath, graphType) {
-        super(inputPath, graphType);
+class AdjacencyMatrix extends Graph { // Classe Base para Grafos
+    constructor(inputPath) {
+        super(inputPath);
     } 
 
-    bfs(s) {
+    /*bfs(s) {
         this.writeOutput(['--- Ouput BFS ---'])
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);
@@ -39,7 +39,10 @@ class AdjacencyMatrix extends GraphStruct { // Classe Base para Grafos
                 } 
             }
         }
-    }
+
+        return markupVector;
+    }*/
+
     dfs(s){
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);

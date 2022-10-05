@@ -1,12 +1,11 @@
-const GraphStruct = require('./graphStruct');
-const LinkedList = require('./linkedList.js')
+const Graph = require('./graph');
 
-class AdjacencyList extends GraphStruct { // Classe Base para Grafos
-    constructor(inputPath, graphType) {
-        super(inputPath, graphType);
+class AdjacencyList extends Graph { // Classe Base para Grafos
+    constructor(inputPath) {
+        super(inputPath);
     } 
 
-    bfs(s) {
+    /*bfs(s) {
         this.writeOutput(['--- Ouput BFS ---'])
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);
@@ -41,7 +40,7 @@ class AdjacencyList extends GraphStruct { // Classe Base para Grafos
             }
             }
         return q;
-    }
+    }*/
 
     dfs(s){
         this.writeOutput(['--- Ouput DFS ---'])
@@ -80,6 +79,5 @@ class AdjacencyList extends GraphStruct { // Classe Base para Grafos
     }
     
 }
-
 
 module.exports = AdjacencyList; // Export class
