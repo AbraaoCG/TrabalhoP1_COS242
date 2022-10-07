@@ -144,21 +144,27 @@ class Graph { // Classe Base para Grafos
         this.writeOutput(['--- Ouput BFS ---'])
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);
+
         for (let i = 0 ; i < this.n ; i++){
-            markupVector[i] = -1;
+            markupVector[i] = Infinity;
         }
         //Definir maxLayer, que será a maior camada gerada na Busca.
         let maxLayer = 0
+	let component = new LinkedList;
         // Definir fila Q vazia
         let q = [];
-        // Marcar s e inserir s na fila Q
+        // Marcar s, inserir s na fila Q e adicionar na componente
         markupVector[s - 1] = 0; // Subtraimos 1 porque o índice do vetor começa em zero
+	//Retirar s da lista de desconhecidos.
+	this.markupStruct[s -1][1].delete()
+
         q.push(s - 1); // Subtraimos 1 porque o índice dos vértices na matriz começa em zero
+	component.append(s)
 
         this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
 
         // O loop funciona de forma distinta para cada uma das estruturas, por isso estão definidos em cada uma das subclasses
-        return [q, markupVector, maxLayer];
+        return [q, markupVector, maxLayer,component];
     }
 
     dfs(s){
@@ -200,17 +206,25 @@ class Graph { // Classe Base para Grafos
 
     convexComponents() {
         // Vetor de marcação para vértices que já estão em uma componente conexa já identificada
-        let markupVector = new Array(this.n);
+	
+        this.markupStruct = new Array(this.n);
+	this.unknowList = new LinkedList();
         for (let i = 0 ; i < this.n ; i++){
-            markupVector[i] = 0;
+            this.markupStruct[i] = new Array(2);
+	    this.markupStruct[i][0] = Infinity // MarkupVector esta em markupStruct[i][0]
+	    this.markupStruct[i][1] = unknowList.append(i+1) // Lista com nos desconhecidos em markupStruct[i][0]
+	    
         }
-        // Vetor que armazena as componentes conexas
+	
+	/*        
+	// Vetor que armazena as componentes conexas
         let components = [];
         // Declaração dos vetores para armazenar o vetor de marcação da bfs e a nova componente
         // conexa identificada a cada iteração
         let layers;
         let newComponent;
-
+	
+	
         // Itera sobre o vetor de marcação
         for (let i = 0; i < markupVector.length; i++) {
             newComponent = [];
@@ -221,7 +235,7 @@ class Graph { // Classe Base para Grafos
 
             // Iteramos sobre o vetor de marcação da bfs
             for (let k = 0; k < layers.length; k++) {
-                if (layers[k] !== -1) { 
+                if (layers[k] !== Infinity) { 
                     // Se o vértice não estiver marcado da bfs, adicionamos ele a nova componente conexa e 
                     // fazemos sua marcação
                     newComponent.push(k + 1); 
@@ -233,11 +247,33 @@ class Graph { // Classe Base para Grafos
             if (newComponent.length !== 0) { components.push(newComponent) };
         }
 
-        // Retorna componentes em ordem decrescente de tamanho 
+	*/
+	
+
+    let numComponents = 0
+    let components = []
+    let i = 0
+    while (unknowList.head.data != null) {
+	let newComponent = []
+	
+	let x = this.bfs(unknowList.head.data)
+
+	newComponent = x
+	if (i == 20 ) return unknowList
+	components.push(newComponent)
+
+	i = i + 1
+	
+	
+    }
+	return [0]
+
+        /* Retorna componentes em ordem decrescente de tamanho 
         return components.sort(function(a, b){
             return b.length - a.length;
-        });
+        });*/
     }
+	
 }
 
 module.exports = Graph; // Export class

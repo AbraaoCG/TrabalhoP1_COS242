@@ -8,7 +8,7 @@ class AdjacencyVector extends Graph { // Classe Base para Grafos
     bfs(s) {
         //BFS herdada de graph.js tem comandos que servem para todas as estrutura de dados. 
         //'q' é a pilha/fila de nós descobertos não explorados. MakupVector acompanha se o o vertice já foi explorado(!= -1) e guarda a camada do vertice durante a exploração.
-        let [q, markupVector,maxLayer] = super.bfs(s);
+        let [q, markupVector,maxLayer,component] = super.bfs(s);
 
         while (q.length !== 0) { // Enquanto Q não estiver vazia
             let v = q.shift(); // Retirar v de Q
@@ -17,9 +17,11 @@ class AdjacencyVector extends Graph { // Classe Base para Grafos
             for (let i = 0; i < this.struct[v].length; i++){
                 let w = this.struct[v][i]
                 // Preciso verificar se esse vizinho não foi marcado (Lembrando que no vetor de adjacência implementado o nó 1 é guardado como 1, e não como 0)
-                if (markupVector[w - 1] === -1) { // Se w não estiver marcado
+                if (markupVector[w - 1] === Infinity) { // Se w não estiver marcado
                     markupVector[w - 1] = markupVector[v] + 1; // O nó "w" que é filho do nó "v", terá 1 nível a mais que "v"
                     q.push(w - 1);
+		    //Adiciono w na componente
+		    component.append(w)
                     // Acompanho a maior camada enquanto busco
                     if (maxLayer < markupVector[w - 1]) maxLayer = markupVector[w - 1];
 
@@ -29,7 +31,7 @@ class AdjacencyVector extends Graph { // Classe Base para Grafos
             }     
         }
             
-        return [markupVector, maxLayer];
+        return [markupVector, maxLayer,component];
     }
 
     dfs(s){
