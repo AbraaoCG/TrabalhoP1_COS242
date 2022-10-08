@@ -5,10 +5,10 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
         super(inputPath);
     } 
 
-    bfs(s) {
+    bfs(s,markupStruct) {
         //BFS herdada de graph.js tem comandos que servem para todas as estrutura de dados. 
         //'q' é a pilha/fila de nós descobertos não explorados. MakupVector acompanha se o o vertice já foi explorado(!= -1) e guarda a camada do vertice durante a exploração.
-        let [q, markupVector,maxLayer,component] = super.bfs(s);
+        let [q, markupVector,maxLayer,component] = super.bfs(s,markupStruct);
         while (q.length !== 0) { // Enquanto Q não estiver vazia
             let v = q.shift(); // Retirar v de Q
 
@@ -20,11 +20,11 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
                     markupVector[w.data - 1] = markupVector[v] + 1; // O nó "w" que é filho do nó "v", terá 1 nível a mais que "v"
                     q.push(w.data - 1);
 		    // Adiciono w nessa componente e retiro w da lista de desconhecidos.
-		    component.append(w.data)
+		    component.push(w.data)
 
 
-		    this.markupStruct[w.data - 1][1].delete()
-		    
+		    markupStruct[w.data - 1][1].delete()
+            //if(w.data == 3)throw markupStruct[w.data -1][1].linkedL.head.data
 		    
                     // Acompanho a maior camada enquanto busco
                     if (maxLayer < markupVector[w.data - 1]) maxLayer = markupVector[w.data - 1];
