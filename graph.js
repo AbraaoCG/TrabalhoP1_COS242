@@ -19,6 +19,7 @@ class Graph { // Classe Base para Grafos
 
     buildInitialStruct(n) {
         let struct;
+        
         switch(this.type) {
             case 'AdjacencyMatrix':
                 // Inicializa matriz de zeros com 2 iterações (linha x Coluna)
@@ -34,6 +35,7 @@ class Graph { // Classe Base para Grafos
                 struct = new Array(n);
                 for (let i = 0 ; i < n ; i++){
                     struct[i] = new LinkedList();
+
                 }
                 return [this.fillAdjacencyList, struct];
             case 'AdjacencyVector':
@@ -74,17 +76,31 @@ class Graph { // Classe Base para Grafos
 
         // Preenche uma das tres Estruturas, vetor de graus e a soma dos graus
         for (let i = 1; i < m + 1 ; i++) {
-            let v1 = parseInt(data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
-            let v2 = parseInt(data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
+
+            let [v1,v2] = this.getNumbers(data[i])
+            
             
             struct = fillMethod(v1, v2, struct); // Cada estrutura de dados preenchida com um metodo proprio 
-
+            
             degreeArray[v1] += 1;
             degreeArray[v2] += 1;
             degreeSum += 2;
         }
 
         return [n, m, degreeArray, degreeSum, struct]
+    }
+    getNumbers(Str){
+        let [num1,num2] = ["",""]
+        let flag = 0
+        
+        for (let i = 0; i < Str.length; i++){
+            if (Str[i] == " ") flag = 1
+            if (flag == 0) num1 = num1.concat(Str[i])
+            else{ // Flag = 1
+                num2 = num2.concat(Str[i])
+            }
+        }
+        return [parseInt(num1) - 1 ,parseInt(num2) - 1] // Subtrai 1, pois vértice x equivale a (x-1) na matriz
     }
 
     getDegreeInfo() {
@@ -116,16 +132,17 @@ class Graph { // Classe Base para Grafos
 
         return struct;
     }
-
-    fillAdjacencyList(v1, v2, struct) {
+    
+    fillAdjacencyList(v1, v2, struct) {    
+        
         struct[v1].append(v2 + 1); // Adiciona v2 a lista de Adj de v1
         struct[v2].append(v1 + 1); // Adiciona v1 a lista de Adj de v2
 
         return struct;
     }
     fillAdjacencyVector(v1, v2, struct) {
-        struct[v1].push(v2 + 1); // Adiciona v2 a lista de Adj de v1
-        struct[v2].push(v1 + 1); // Adiciona v1 a lista de Adj de v2
+        struct[v1].push(v2 + 1); // Adiciona v2 ao Vetor de Adj de v1
+        struct[v2].push(v1 + 1); // Adiciona v1 ao Vetor de Adj de v2
 
         return struct;
     }
@@ -156,7 +173,7 @@ class Graph { // Classe Base para Grafos
         // Marcar s, inserir s na fila Q e adicionar na componente
         markupVector[s - 1] = 0; // Subtraimos 1 porque o índice do vetor começa em zero
 	    //Retirar s da lista de desconhecidos.
-	    markupStruct[s -1][1].delete()
+	    markupStruct[s -1].delete()
         
 
         q.push(s - 1); // Subtraimos 1 porque o índice dos vértices na matriz começa em zero
@@ -209,33 +226,30 @@ class Graph { // Classe Base para Grafos
     }
     convexComponents() {
         // Vetor de marcação para vértices que já estão em uma componente conexa já identificada
-	
+        
         let markupStruct = new Array(this.n);
 	    let unknowList = new LinkedList();
         for (let i = 0 ; i < this.n ; i++){
-            markupStruct[i] = new Array(2);
-	    markupStruct[i][0] = Infinity // MarkupVector esta em markupStruct[i][0]
-	    markupStruct[i][1] = unknowList.append(i+1) // Lista com nos desconhecidos em markupStruct[i][0]
+            markupStruct[i] = unknowList.append(i+1)
+            //markupStruct[i] = new Array(2);
+	        //markupStruct[i][1] = unknowList.append(i+1) // Lista com nos desconhecidos em markupStruct[i][0]
 	    
         }
 	
-    
         let numComponents = 0
         let components = []
-        let i = 0
-        
-        while (markupStruct[i][1].linkedL.head.data != null) {
-            let newComponent = []
-            
-            let x = this.bfs(markupStruct[i][1].linkedL.head.data,markupStruct)
 
-            newComponent = x[2]
-            if (i == 10) return i 
+        // Cada nó tem ponteiro para a lista, que tem ponteiro para a 'head', que varia durante execução da Bfs. (head --> "currentHead")
+        let currentHead = 1 
+        while ( currentHead  != null) {
+            let newComponent = []
+            newComponent = this.bfs(currentHead ,markupStruct)[2]
             components.push(newComponent)
 
-            i = i + 1
+            currentHead = markupStruct[0].linkedL.head.data
         }
-        return components
+         
+        return [components.length, components]
 	/*        
 	// Vetor que armazena as componentes conexas
         let components = [];

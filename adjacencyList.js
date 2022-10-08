@@ -19,13 +19,10 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
                 if (markupVector[w.data - 1] === Infinity) { // Se w não estiver marcado
                     markupVector[w.data - 1] = markupVector[v] + 1; // O nó "w" que é filho do nó "v", terá 1 nível a mais que "v"
                     q.push(w.data - 1);
-		    // Adiciono w nessa componente e retiro w da lista de desconhecidos.
-		    component.push(w.data)
+		            // Adiciono w nessa componente e retiro w da lista de desconhecidos.
+		            component.push(w.data)
+		            markupStruct[w.data - 1].delete()
 
-
-		    markupStruct[w.data - 1][1].delete()
-            //if(w.data == 3)throw markupStruct[w.data -1][1].linkedL.head.data
-		    
                     // Acompanho a maior camada enquanto busco
                     if (maxLayer < markupVector[w.data - 1]) maxLayer = markupVector[w.data - 1];
                     
