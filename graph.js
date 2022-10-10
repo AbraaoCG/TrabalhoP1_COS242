@@ -145,7 +145,7 @@ class Graph { // Classe Base para Grafos
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
-            markupVector[i] = -1;
+            markupVector[i] = Infinity;
         }
         //Definir maxLayer, que será a maior camada gerada na Busca.
         let maxLayer = 0
@@ -166,7 +166,7 @@ class Graph { // Classe Base para Grafos
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
-            markupVector[i] = -1;
+            markupVector[i] = Infinity;
         }
         //Definir maxLayer, que será a maior camada gerada na Busca.
         let maxLayer = 0
@@ -202,41 +202,50 @@ class Graph { // Classe Base para Grafos
         // Vetor de marcação para vértices que já estão em uma componente conexa já identificada
         let markupVector = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
-            markupVector[i] = 0;
+            markupVector[i] = Infinity;
         }
-        // Vetor que armazena as componentes conexas
-        let components = [];
-        // Declaração dos vetores para armazenar o vetor de marcação da bfs e a nova componente
-        // conexa identificada a cada iteração
+        // Vetor que armazena um objeto tamanhos das componentes convexas e a marcação correspondente
+        let componentSizes = [];
+        // Variável de marcação 
+        let mark = 0;
+        // Declaração dos vetores para armazenar o vetor de marcação da bfs e o tamanho de cada componente
         let layers;
-        let newComponent;
+        let size;
 
         // Itera sobre o vetor de marcação
         for (let i = 0; i < markupVector.length; i++) {
-            newComponent = [];
-            // Se o vértice não estiver quer dizer que não está em uma componente conexa já identificada,
-            // logo, é necessário aplicar a bfs para identificar uma nova componente
-            if (markupVector[i] === 0) { layers = this.bfs(i + 1)[0] } 
-            else { layers = [] };
+            if (markupVector[i] === Infinity) {
+                size = 0;
+                layers = this.bfs(i + 1)[0];
 
-            // Iteramos sobre o vetor de marcação da bfs
-            for (let k = 0; k < layers.length; k++) {
-                if (layers[k] !== -1) { 
-                    // Se o vértice não estiver marcado da bfs, adicionamos ele a nova componente conexa e 
-                    // fazemos sua marcação
-                    newComponent.push(k + 1); 
-                    markupVector[k] = 1;
+                // Iteramos sobre o vetor de marcação da bfs
+                for (let k = 0; k < layers.length; k++) {
+                    if (layers[k] !== Infinity) { // Se o vértice estiver marcado da bfs
+                        size ++;
+                        markupVector[k] = mark; // Marca os vetores com marcações distintas
+                    }
+                }
+
+                componentSizes.push({ size, mark }); // Armazena o objeto no vetor
+                mark++; // Incrementa a variável de marcação
+            }
+        }
+
+        // Ordena o vetor de tamanhos
+        componentSizes = componentSizes.sort(function(a, b){
+            return b.size - a.size;
+        });
+        // Retorna em ordem decrescente cada uma das componentes
+        for (let i = 0; i < componentSizes.length; i++) {
+            let vertexes = [];
+            for (let k = 0; k < markupVector.length; k++) {
+                if (markupVector[k] === componentSizes[i].mark) {
+                    vertexes.push(k);
                 }
             }
 
-            // Adicionamos a nova componente conexa ao vetor de componentes conexas
-            if (newComponent.length !== 0) { components.push(newComponent) };
+            this.writeOutput([vertexes]);
         }
-
-        // Retorna componentes em ordem decrescente de tamanho 
-        return components.sort(function(a, b){
-            return b.length - a.length;
-        });
     }
 }
 

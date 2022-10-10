@@ -47,7 +47,7 @@ class AdjacencyList extends Graph { // Classe Base para Grafos
             let w = this.struct[v].head;
             while(w != null){   
                 // Preciso verificar se esse vizinho não foi marcado (Lembrando que na lista de adjacência implementada o nó 1 é guardado como 1, e não como 0. )
-                if (markupVector[w.data - 1] === -1) { // Se w não estiver marcado
+                if (markupVector[w.data - 1] === Infinity) { // Se w não estiver marcado
                     markupVector[w.data - 1] = markupVector[v] + 1;
                     q.push(w.data - 1);
                     // Acompanho a maior camada enquanto busco

@@ -17,7 +17,7 @@ class AdjacencyVector extends Graph { // Classe Base para Grafos
             for (let i = 0; i < this.struct[v].length; i++){
                 let w = this.struct[v][i]
                 // Preciso verificar se esse vizinho não foi marcado (Lembrando que no vetor de adjacência implementado o nó 1 é guardado como 1, e não como 0)
-                if (markupVector[w - 1] === -1) { // Se w não estiver marcado
+                if (markupVector[w - 1] === Infinity) { // Se w não estiver marcado
                     markupVector[w - 1] = markupVector[v] + 1; // O nó "w" que é filho do nó "v", terá 1 nível a mais que "v"
                     q.push(w - 1);
                     // Acompanho a maior camada enquanto busco
@@ -46,7 +46,7 @@ class AdjacencyVector extends Graph { // Classe Base para Grafos
             for(let i = 0; i < this.struct[v].length; i++){
                 let w = this.struct[v][i]
                 // Preciso verificar se esse vizinho não foi marcado (Lembrando que no vetor de adjacência implementado o nó 1 é guardado como 1, e não como 0. )
-                if (markupVector[w - 1] === -1) { // Se w não estiver marcado
+                if (markupVector[w - 1] === Infinity) { // Se w não estiver marcado
                     markupVector[w - 1] = markupVector[v] + 1;
                     q.push(w - 1);
                     // Acompanho a maior camada enquanto busco
