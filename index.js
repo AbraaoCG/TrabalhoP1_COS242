@@ -1,7 +1,7 @@
 const AdjacencyMatrix = require('./adjacencyMatrix');
 const AdjacencyList = require('./adjacencyList');
 const AdjacencyVector = require('./adjacencyVector');
-const input = 'input.txt'
+const input = 'grafo_4.txt'
 
 
 myGraph = new AdjacencyList(input);
