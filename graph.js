@@ -48,14 +48,8 @@ class Graph { // Classe Base para Grafos
     readInput(inputPath) {
         let data = fs.readFileSync(inputPath, 'utf8'); // Faz a leitura do arquivo de input
         //Detalhe: Em ambientes Windows, percebemos que a quebra de linha é feita com o identificador \r\n, enquanto no Linux isso é feito apenas com \n
-	    if( os.platform() === 'win32') {
-            data = data.split(/\r\n/);
-        }
-        else {
-            data = data.split(/\n/); // Armazena cada linha do arquivo em um vetor
-        }
-
-        
+        data = data.split(/\n/); // Armazena cada linha do arquivo em um vetor
+   
         // Define num. de vértices
         const n = parseInt(data[0]);
         // Define num. de arestas
@@ -259,7 +253,7 @@ class Graph { // Classe Base para Grafos
                 }
             }
 
-            this.writeOutput([vertexes]);
+            this.writeOutput([`Componente de tamanho ${componentSizes[i].size}: ` , vertexes]);
         }
     }
 }
