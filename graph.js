@@ -48,8 +48,10 @@ class Graph { // Classe Base para Grafos
     readInput(inputPath) {
         let data = fs.readFileSync(inputPath, 'utf8'); // Faz a leitura do arquivo de input
         //Detalhe: Em ambientes Windows, percebemos que a quebra de linha é feita com o identificador \r\n, enquanto no Linux isso é feito apenas com \n
-        if( os.platform() === 'win32'){ 
-            data = data.split(/\r\n/);
+	let osType = 0       
+	if( os.platform() === 'win32'){
+ 	    osType = 1
+            //data = data.split(/\r\n/);
         }
         else{
             data = data.split(/\n/); // Armazena cada linha do arquivo em um vetor
@@ -74,17 +76,32 @@ class Graph { // Classe Base para Grafos
 
         // Preenche uma das tres Estruturas, vetor de graus e a soma dos graus
         for (let i = 1; i < m + 1 ; i++) {
-            let v1 = parseInt(data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
-            let v2 = parseInt(data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
+
+            let [v1,v2] = this.getNumbers(data[i])
+            
             
             struct = fillMethod(v1, v2, struct); // Cada estrutura de dados preenchida com um metodo proprio 
-
+            
             degreeArray[v1] += 1;
             degreeArray[v2] += 1;
             degreeSum += 2;
         }
 
         return [n, m, degreeArray, degreeSum, struct]
+    }
+    
+    getNumbers(Str){
+        let [num1,num2] = ["",""]
+        let flag = 0
+        
+        for (let i = 0; i < Str.length; i++){
+            if (Str[i] == " ") flag = 1
+            if (flag == 0) num1 = num1.concat(Str[i])
+            else{ // Flag = 1
+                num2 = num2.concat(Str[i])
+            }
+        }
+        return [parseInt(num1) - 1 ,parseInt(num2) - 1] // Subtrai 1, pois vértice x equivale a (x-1) na matriz
     }
 
     getDegreeInfo() {
@@ -145,7 +162,7 @@ class Graph { // Classe Base para Grafos
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
-            markupVector[i] = -1;
+            markupVector[i] = Infinity;
         }
         //Definir maxLayer, que será a maior camada gerada na Busca.
         let maxLayer = 0
@@ -158,7 +175,7 @@ class Graph { // Classe Base para Grafos
         this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
 
         // O loop funciona de forma distinta para cada uma das estruturas, por isso estão definidos em cada uma das subclasses
-        return [q, markupVector,maxLayer];
+        return [q, markupVector, maxLayer];
     }
 
     dfs(s){
@@ -166,7 +183,7 @@ class Graph { // Classe Base para Grafos
         // Desmarcar todos os vértices com o valor de -1. Isso porque o markupVector receberá o nível de cada vértice
         let markupVector = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
-            markupVector[i] = -1;
+            markupVector[i] = Infinity;
         }
         //Definir maxLayer, que será a maior camada gerada na Busca.
         let maxLayer = 0
@@ -179,7 +196,7 @@ class Graph { // Classe Base para Grafos
         this.writeOutput([`Nível ${markupVector[s - 1]}: `, `Vértice ${s} (raíz)`]) // Imprime o nó raíz
         
         // O loop funciona de forma distinta para cada uma das estruturas, por isso estão definidos em cada uma das subclasses
-        return [q, markupVector,maxLayer];
+        return [q, markupVector, maxLayer];
     }
 
     distance(u, v) {
@@ -196,6 +213,56 @@ class Graph { // Classe Base para Grafos
             max = (currentMax > max) ? currentMax : max 
         }
         return max;
+    }
+
+    connectedComponents() {
+        // Vetor de marcação para vértices que já estão em uma componente conexa já identificada
+        let markupVector = new Array(this.n);
+        for (let i = 0 ; i < this.n ; i++){
+            markupVector[i] = Infinity;
+        }
+        // Vetor que armazena um objeto tamanhos das componentes conexas e a marcação correspondente
+        let componentSizes = [];
+        // Variável de marcação 
+        let mark = 0;
+        // Declaração dos vetores para armazenar o vetor de marcação da bfs e o tamanho de cada componente
+        let layers;
+        let size;
+
+        // Itera sobre o vetor de marcação
+        for (let i = 0; i < markupVector.length; i++) {
+            if (markupVector[i] === Infinity) {
+                size = 0;
+                layers = this.bfs(i + 1)[0];
+
+                // Iteramos sobre o vetor de marcação da bfs
+                for (let k = 0; k < layers.length; k++) {
+                    if (layers[k] !== Infinity) { // Se o vértice estiver marcado da bfs
+                        size ++;
+                        markupVector[k] = mark; // Marca os vetores com marcações distintas
+                    }
+                }
+
+                componentSizes.push({ size, mark }); // Armazena o objeto no vetor
+                mark++; // Incrementa a variável de marcação
+            }
+        }
+
+        // Ordena o vetor de tamanhos
+        componentSizes = componentSizes.sort(function(a, b){
+            return b.size - a.size;
+        });
+        // Retorna em ordem decrescente cada uma das componentes
+        for (let i = 0; i < componentSizes.length; i++) {
+            let vertexes = [];
+            for (let k = 0; k < markupVector.length; k++) {
+                if (markupVector[k] === componentSizes[i].mark) {
+                    vertexes.push(k);
+                }
+            }
+
+            this.writeOutput([vertexes]);
+        }
     }
 }
 
