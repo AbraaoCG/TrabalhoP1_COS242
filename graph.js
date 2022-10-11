@@ -198,13 +198,13 @@ class Graph { // Classe Base para Grafos
         return max;
     }
 
-    convexComponents() {
+    connectedComponents() {
         // Vetor de marcação para vértices que já estão em uma componente conexa já identificada
         let markupVector = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
             markupVector[i] = Infinity;
         }
-        // Vetor que armazena um objeto tamanhos das componentes convexas e a marcação correspondente
+        // Vetor que armazena um objeto tamanhos das componentes conexas e a marcação correspondente
         let componentSizes = [];
         // Variável de marcação 
         let mark = 0;
