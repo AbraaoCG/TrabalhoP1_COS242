@@ -45,7 +45,7 @@ class AdjacencyMatrix extends Graph { // Classe Base para Grafos
             // Está percorrendo a linha inteira da matriz
             for (let w = 0 ; w < this.n ; w++){
                 if (this.struct[v][w] === 1) {
-                    if (markupVector[w] === -1) { // Se w não estiver marcado
+                    if (markupVector[w] === Infinity) { // Se w não estiver marcado
                         markupVector[w] = markupVector[v] + 1;
                         q.push(w);
                         // Acompanho a maior camada enquanto busco
