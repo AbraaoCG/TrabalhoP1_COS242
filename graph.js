@@ -47,9 +47,11 @@ class Graph { // Classe Base para Grafos
 
     readInput(inputPath) {
         let data = fs.readFileSync(inputPath, 'utf8'); // Faz a leitura do arquivo de input
-        // Detalhe: Em ambientes Windows, percebemos que a quebra de linha é feita com o identificador \r\n, enquanto no Linux isso é feito apenas com \n
-        if( os.platform() === 'win32'){ 
-            data = data.split(/\r\n/);
+        //Detalhe: Em ambientes Windows, percebemos que a quebra de linha é feita com o identificador \r\n, enquanto no Linux isso é feito apenas com \n
+	let osType = 0       
+	if( os.platform() === 'win32'){
+ 	    osType = 1
+            //data = data.split(/\r\n/);
         }
         else{
             data = data.split(/\n/); // Armazena cada linha do arquivo em um vetor
@@ -74,17 +76,32 @@ class Graph { // Classe Base para Grafos
 
         // Preenche uma das tres Estruturas, vetor de graus e a soma dos graus
         for (let i = 1; i < m + 1 ; i++) {
-            let v1 = parseInt(data[i][0]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
-            let v2 = parseInt(data[i][2]) - 1; // Subtrai 1, pois vértice x equivale a (x-1) na matriz
+
+            let [v1,v2] = this.getNumbers(data[i])
+            
             
             struct = fillMethod(v1, v2, struct); // Cada estrutura de dados preenchida com um metodo proprio 
-
+            
             degreeArray[v1] += 1;
             degreeArray[v2] += 1;
             degreeSum += 2;
         }
 
         return [n, m, degreeArray, degreeSum, struct]
+    }
+    
+    getNumbers(Str){
+        let [num1,num2] = ["",""]
+        let flag = 0
+        
+        for (let i = 0; i < Str.length; i++){
+            if (Str[i] == " ") flag = 1
+            if (flag == 0) num1 = num1.concat(Str[i])
+            else{ // Flag = 1
+                num2 = num2.concat(Str[i])
+            }
+        }
+        return [parseInt(num1) - 1 ,parseInt(num2) - 1] // Subtrai 1, pois vértice x equivale a (x-1) na matriz
     }
 
     getDegreeInfo() {
