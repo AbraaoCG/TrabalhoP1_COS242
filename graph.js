@@ -47,7 +47,6 @@ class Graph { // Classe Base para Grafos
 
     readInput(inputPath) {
         let data = fs.readFileSync(inputPath, 'utf8'); // Faz a leitura do arquivo de input
-        //Detalhe: Em ambientes Windows, percebemos que a quebra de linha é feita com o identificador \r\n, enquanto no Linux isso é feito apenas com \n
         data = data.split(/\n/); // Armazena cada linha do arquivo em um vetor
    
         // Define num. de vértices
@@ -203,6 +202,17 @@ class Graph { // Classe Base para Grafos
         for (let v = 1 ; v <= this.n ; v++) { // É necessário executar a bfs para cada vértice 
             let currentMax = this.bfs(v)[1]
             max = (currentMax > max) ? currentMax : max 
+        }
+        return max;
+    }
+
+    estimateDiameter(k) {
+        let max = 0;
+        for (let i = 1; i <= k; i++) {
+            let v = Math.floor(Math.random() * this.n) + 1; // Escolhe vértice aleatório do grafo
+
+            let currentMax = this.bfs(v)[1]; // Executa bfs para cada vértice aleatório
+            max = currentMax > max ? currentMax : max;
         }
         return max;
     }
