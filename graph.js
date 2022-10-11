@@ -47,7 +47,7 @@ class Graph { // Classe Base para Grafos
 
     readInput(inputPath) {
         let data = fs.readFileSync(inputPath, 'utf8'); // Faz a leitura do arquivo de input
-        //Detalhe: Em ambientes Windows, percebemos que a quebra de linha é feita com o identificador \r\n, enquanto no Linux isso é feito apenas com \n
+        // Detalhe: Em ambientes Windows, percebemos que a quebra de linha é feita com o identificador \r\n, enquanto no Linux isso é feito apenas com \n
         if( os.platform() === 'win32'){ 
             data = data.split(/\r\n/);
         }
