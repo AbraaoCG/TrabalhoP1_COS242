@@ -72,7 +72,27 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
             };
         };
 
-        return dist, parent;
+        return [dist, parent];
+    };
+
+    getMinimalPath(s, parent) {
+        let minimalPath = [s + 1];
+        let v = s;
+        while(parent[v] !== undefined) { // Ainda não chegou até a raíz
+            minimalPath.unshift(parent[v] + 1);
+            v = parent[v];
+        };
+
+        return minimalPath;
+    };
+
+    distAndMinimalPath(s) {
+        let [dist, parent] = this.dijkstra(s);
+        let minimalPath;
+        for (let i = 0 ; i < dist.length ; i++) {
+            minimalPath = this.getMinimalPath(i, parent);
+            console.log(`Distância do vértice ${s} até ${i + 1} é: ${dist[i]}. Um dos caminhos mínimos é dado por ${minimalPath}`);
+        };
     };
 };
 
