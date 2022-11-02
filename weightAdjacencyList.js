@@ -1,5 +1,6 @@
+const { Heap } = require('heap-js');
 const WeightGraph = require('./weightGraph');
-const LinkedList = require('./linkedList.js')
+const LinkedList = require('./linkedList.js');
 
 class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
     constructor(inputPath) {
@@ -24,13 +25,13 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return [this.fillStruct, struct];
     };
 
-    getMin(exploitedArray, dist) {
+    getMin(exploitedArray, baseArray) {
         let min = Infinity;
         let minIndex;
         for (let i = 0 ; i < this.n ; i++) {
-            if (exploitedArray[i] === false && dist[i] < min) {
+            if (exploitedArray[i] === false && baseArray[i] < min) {
                 minIndex = i;
-                min = dist[minIndex];
+                min = baseArray[minIndex];
             };
         };
         return minIndex;
@@ -94,6 +95,51 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
             console.log(`Distância do vértice ${s} até ${i + 1} é: ${dist[i]}. Um dos caminhos mínimos é dado por ${minimalPath}`);
         };
     };
+
+    prim(s) {
+        let cost = new Array(this.n);
+        let parent = new Array(this.n);
+        let exploitedArray = new Array(this.n);
+        for (let i = 0 ; i < this.n ; i++){
+            cost[i] = Infinity;
+            parent[i] = undefined;
+            exploitedArray[i] = false;
+        };
+
+        cost[s - 1] = 0;
+        let u;
+        for (let i = 0 ; i < this.n ; i++) {
+            u = this.getMin(exploitedArray, cost);
+            exploitedArray[u] = true;
+
+            let v = this.struct[u].head;
+            let vIndex;
+            let edgeWeight;
+            while(v != null){
+                vIndex = v.data[0];
+                edgeWeight = v.data[1];   
+                if (cost[vIndex] > edgeWeight && exploitedArray[vIndex] == false) {
+                    cost[vIndex] = edgeWeight;
+                    parent[vIndex] = u;
+                };
+
+                v = v.next;
+            };
+        };
+
+        return [cost, parent];
+    };
+
+    mst() {
+        this.writeOutput(['--- Ouput MST ---']);
+        const [cost, parent] = this.prim(1);
+        let total = 0;
+        for (let i = 1 ; i < cost.length ; i++) {
+            total += cost[i];
+            this.writeOutput([`${parent[i] + 1} ${i + 1}`]);
+        };
+        this.writeOutput([`Custo total: ${total}`]);
+    }
 };
 
 module.exports = WeightAdjacencyList; // Export class
