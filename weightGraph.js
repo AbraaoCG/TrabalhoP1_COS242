@@ -1,9 +1,8 @@
 const fs = require('fs');
-const os = require('os');
 
 class WeightGraph { // Classe base para grafos com pesos
     constructor(inputPath) {
-        [this.n, this.m, this.struct] = this.readInput(inputPath);
+        [this.n, this.m, this.struct, this.negativeWeights] = this.readInput(inputPath);
     };
 
     writeOutput(textList) { // Função que escreve no arquivo output.txt
@@ -25,14 +24,17 @@ class WeightGraph { // Classe base para grafos com pesos
 
         // Constrói a estrutura inicial e o método de preenchimento para cada uma das representações
         let [fillMethod, struct] = this.buildInitialStruct(n);
+        let negativeWeights = false; // Variável que indica se o grafo tem pesos negativos
 
         // Preenche uma das tres Estruturas, vetor de graus e a soma dos graus
         for (let i = 1; i < m + 1 ; i++) {
             let [v1, v2, weight] = data[i].split(' ').map((n) => parseFloat(n));
             struct = fillMethod(v1, v2, weight, struct); // Estrutura de dados preenchida com o método definido na subclasse
+
+            if (weight < 0) negativeWeights = true; // Grafo com peso negativo
         };
 
-        return [n, m, struct];
+        return [n, m, struct, negativeWeights];
     };
 };
 
