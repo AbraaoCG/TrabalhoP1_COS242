@@ -25,7 +25,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return [this.fillStruct, struct];
     };
 
-    getMin(exploitedArray, baseArray) {
+    getMin(exploitedArray, baseArray) { // Metodo auxiliar para percorrer "descobertos "
         let min = Infinity;
         let minIndex;
         for (let i = 0 ; i < this.n ; i++) {
@@ -38,11 +38,11 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
     };
 
     dijkstra(s) {
-        if (this.negativeWeights) {
+        if (this.negativeWeights) { // Verifico se ha pesos negativos.
             throw 'Library does not yet implement shortest paths with negative weights'
         }
 
-        // Marca a distância de todos os vértices como infinito e os pais de cada vértice como indefinido
+        // Marca a distância de todos os vértices como infinito, os pais de cada vértice como indefinido e a todos os vertices como nao explorados
         let dist = new Array(this.n);
         let parent = new Array(this.n);
         let exploitedArray = new Array(this.n);
@@ -51,14 +51,15 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
             parent[i] = undefined;
             exploitedArray[i] = false;
         };
-
+        // Distancia de s --> s  = 0
         dist[s - 1] = 0;
+
         let u;
         for (let i = 0 ; i < this.n ; i++) {
             u = this.getMin(exploitedArray, dist);
             exploitedArray[u] = true;
 
-            let v = this.struct[u].head;
+            let v = this.struct[u].head; // Seleciono primeiro vizinho de u
             let vIndex;
             let edgeWeight;
             while(v != null){
@@ -117,7 +118,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
             let edgeWeight;
             while(v != null){
                 vIndex = v.data[0];
-                edgeWeight = v.data[1];   
+                edgeWeight = v.data[1];
                 if (cost[vIndex] > edgeWeight && exploitedArray[vIndex] == false) {
                     cost[vIndex] = edgeWeight;
                     parent[vIndex] = u;
