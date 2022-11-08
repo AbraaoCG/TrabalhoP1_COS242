@@ -1,6 +1,6 @@
-const { Heap } = require('heap-js');
+const Heap = require('./heap');
 const WeightGraph = require('./weightGraph');
-const LinkedList = require('./linkedList.js');
+const LinkedList = require('./linkedList');
 
 class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
     constructor(inputPath) {
@@ -140,6 +140,51 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         };
         this.writeOutput([`Custo total: ${total}`]);
     }
+
+    dijkstraHeap(s) {
+        if (this.negativeWeights) {
+            throw 'Library does not yet implement shortest paths with negative weights'
+        }
+
+        // Marca a distância de todos os vértices como infinito ( em uma Heap ), os pais de cada vértice como indefinido e cria um vetor de explorados.
+        // A heap uma subclasse de um Array do javascript, e o atributo "controlIndex" é um Array que guarda na posição 'v' o index da distância de v na Heap.
+        let dist = new Heap(this.n, true);
+        let parent = new Array(this.n);
+        let exploitedArray = new Array(this.n);
+        for (let i = 0 ; i < this.n ; i++){
+            dist[i] = Infinity;
+            parent[i] = undefined;
+            exploitedArray[i] = false;
+        };
+        // insere o vertice inicial na raiz da Heap e define no vetor "dist.heapIndex" a posição do vertice inicial 's' na Heap.
+        dist[0] = 0;
+        dist.heapIndex[s - 1] = 0;
+        let u;
+        for (let i = 0 ; i < this.n ; i++) { // Itera-se em 'n', pois sabemos que todos os vértices serão selecionados como 'u' para serem explorados.
+            u = dist.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
+            exploitedArray[u] = true;
+
+            let v = this.struct[u].head;
+            let vIndex; // Varíavel que armazena vizinho 'v' de 'u'
+            let edgeWeight; // Varíavel que armazena peso da aresta u - v.
+            let newPriority; // Varíavel que armazena a possível nova prioridade
+            let heapIndexToChange; // Variável que armazena o possível índice que deverá ter sua prioridade alterada
+            while(v != null) {
+                vIndex = v.data[0]; 
+                edgeWeight = v.data[1];
+                heapIndexToChange = dist.heapIndex[vIndex]
+                if (dist[heapIndexToChange] > (dist[u] + edgeWeight)) {
+                    newPriority = dist[u] + edgeWeight;
+                    dist.changePriority(heapIndexToChange, newPriority);
+                    parent[vIndex] = u;
+                };
+
+                v = v.next;
+            };
+        };
+
+        return [dist, parent];
+    };
 };
 
 module.exports = WeightAdjacencyList; // Export class
