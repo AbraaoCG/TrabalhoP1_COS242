@@ -4,10 +4,4 @@ const LinkedList = require('./linkedList');
 const input = 'input.txt';
 
 myGraph = new WeightAdjacencyList(input);
-myGraph.dijkstra_Heap(7);
-//myGraph.distAndMinimalPath(1);
-
-
-
-
-
+console.log(myGraph.prim(1));
