@@ -37,7 +37,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return minIndex;
     };
 
-    dijkstra(s) {
+    dijkstra_Vector(s) {
         if (this.negativeWeights) { // Verifico se ha pesos negativos.
             throw 'Library does not yet implement shortest paths with negative weights'
         }
@@ -46,6 +46,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         let dist = new Array(this.n);
         let parent = new Array(this.n);
         let exploitedArray = new Array(this.n);
+        let num_exploiteds = 0
         for (let i = 0 ; i < this.n ; i++){
             dist[i] = Infinity;
             parent[i] = undefined;
@@ -55,9 +56,11 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         dist[s - 1] = 0;
 
         let u;
-        for (let i = 0 ; i < this.n ; i++) {
+        //for (let i = 0 ; i < this.n ; i++) {
+        while (num_exploiteds != this.n){
             u = this.getMin(exploitedArray, dist);
-            exploitedArray[u] = true;
+            exploitedArray[u] = true; 
+            num_exploiteds++
 
             let v = this.struct[u].head; // Seleciono primeiro vizinho de u
             let vIndex;
@@ -69,7 +72,50 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
                     dist[vIndex] = dist[u] + edgeWeight;
                     parent[vIndex] = u;
                 };
+                v = v.next;
+            };
+        };
 
+        return [dist, parent];
+    };
+
+    dijkstra_Heap(s) {
+        if (this.negativeWeights) { // Verifico se ha pesos negativos.
+            throw 'Library does not yet implement shortest paths with negative weights'
+        }
+
+        // Marca a distância de todos os vértices como infinito, os pais de cada vértice como indefinido e a todos os vertices como nao explorados
+        let dist = new Array(this.n);
+        let parent = new Array(this.n);
+        let exploitedArray = new Array(this.n);
+        let numExploiteds = 0
+        let discoveredsHeap = new Heap();
+        for (let i = 0 ; i < this.n ; i++){
+            dist[i] = Infinity;
+            parent[i] = undefined;
+            exploitedArray[i] = false;
+            
+        };
+        // Distancia de s --> s  = 0
+        dist[s - 1] = 0;
+
+        let u;
+        
+        while (numExploiteds != this.n){
+            //u = this.getMin(exploitedArray, dist);
+            exploitedArray[u] = true; 
+            numExploiteds++
+
+            let v = this.struct[u].head; // Seleciono primeiro vizinho de u
+            let vIndex;
+            let edgeWeight;
+            while(v != null){
+                vIndex = v.data[0];
+                edgeWeight = v.data[1];   
+                if (dist[vIndex] > (dist[u] + edgeWeight)) {
+                    dist[vIndex] = dist[u] + edgeWeight;
+                    parent[vIndex] = u;
+                };
                 v = v.next;
             };
         };
@@ -89,7 +135,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
     };
 
     distAndMinimalPath(s) {
-        let [dist, parent] = this.dijkstra(s);
+        let [dist, parent] = this.dijkstra_Heap(s);
         let minimalPath;
         for (let i = 0 ; i < dist.length ; i++) {
             minimalPath = this.getMinimalPath(i, parent);
