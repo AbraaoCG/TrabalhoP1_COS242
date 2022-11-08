@@ -37,32 +37,28 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return minIndex;
     };
 
-    dijkstra_Vector(s) {
-        if (this.negativeWeights) { // Verifico se ha pesos negativos.
+    dijkstraVector(s) {
+        if (this.negativeWeights) {
             throw 'Library does not yet implement shortest paths with negative weights'
         }
 
-        // Marca a distância de todos os vértices como infinito, os pais de cada vértice como indefinido e a todos os vertices como nao explorados
-        let dist = new Heap(this.n);
+        // Marca a distância de todos os vértices como infinito e os pais de cada vértice como indefinido
+        let dist = new Array(this.n);
         let parent = new Array(this.n);
         let exploitedArray = new Array(this.n);
-        let num_exploiteds = 0
         for (let i = 0 ; i < this.n ; i++){
             dist[i] = Infinity;
             parent[i] = undefined;
             exploitedArray[i] = false;
         };
-        // Distancia de s --> s  = 0
+
         dist[s - 1] = 0;
-
         let u;
-        //for (let i = 0 ; i < this.n ; i++) {
-        while (num_exploiteds != this.n){
-            u = dist.
-            exploitedArray[u] = true; 
-            num_exploiteds++
+        for (let i = 0 ; i < this.n ; i++) {
+            u = this.getMin(exploitedArray, dist);
+            exploitedArray[u] = true;
 
-            let v = this.struct[u].head; // Seleciono primeiro vizinho de u
+            let v = this.struct[u].head;
             let vIndex;
             let edgeWeight;
             while(v != null){
@@ -72,6 +68,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
                     dist[vIndex] = dist[u] + edgeWeight;
                     parent[vIndex] = u;
                 };
+
                 v = v.next;
             };
         };
@@ -79,7 +76,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return [dist, parent];
     };
 
-    dijkstra_Heap(s) {
+    dijkstraHeap(s) {
         if (this.negativeWeights) { // Verifico se ha pesos negativos.
             throw 'Library does not yet implement shortest paths with negative weights'
         }
@@ -136,8 +133,18 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return minimalPath;
     };
 
-    distAndMinimalPath(s, v = null) {
-        let [dist, parent] = this.dijkstra_Heap(s);
+    distAndMinimalPathHeap(s, v = null) {
+        let [dist, parent] = this.dijkstraHeap(s);
+        let minimalPath;
+        for (let i = 0 ; i < dist.length ; i++) {
+            minimalPath = this.getMinimalPath(i, parent);
+            //console.log(`Distância do vértice ${s} até ${i + 1} é: ${dist[i]}. Um dos caminhos mínimos é dado por ${minimalPath}`);
+        };
+        if (v != null) return dist[ v - 1 ]
+        else{ return dist }
+    };
+    distAndMinimalPathVector(s, v = null) {
+        let [dist, parent] = this.dijkstraVector(s);
         let minimalPath;
         for (let i = 0 ; i < dist.length ; i++) {
             minimalPath = this.getMinimalPath(i, parent);
