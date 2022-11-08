@@ -112,7 +112,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
                     vIndex = v.data[0];
                     edgeWeight = v.data[1];  
                     heapIndexToChange = distHeap.heapIndex[vIndex];
-                    console.log(distHeap[heapIndexToChange][0] , dist_u + edgeWeight)
+                    //console.log(distHeap[heapIndexToChange][0] , dist_u + edgeWeight)
                     if (distHeap[heapIndexToChange][0] > (dist_u + edgeWeight)) {
                         distHeap.changePriority(heapIndexToChange, dist_u + edgeWeight);
                         parent[vIndex] = u;
@@ -136,13 +136,15 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return minimalPath;
     };
 
-    distAndMinimalPath(s) {
+    distAndMinimalPath(s, v = null) {
         let [dist, parent] = this.dijkstra_Heap(s);
         let minimalPath;
         for (let i = 0 ; i < dist.length ; i++) {
             minimalPath = this.getMinimalPath(i, parent);
-            console.log(`Distância do vértice ${s} até ${i + 1} é: ${dist[i]}. Um dos caminhos mínimos é dado por ${minimalPath}`);
+            //console.log(`Distância do vértice ${s} até ${i + 1} é: ${dist[i]}. Um dos caminhos mínimos é dado por ${minimalPath}`);
         };
+        if (v != null) return dist[ v - 1 ]
+        else{ return dist }
     };
 
     prim(s) {

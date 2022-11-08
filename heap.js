@@ -100,7 +100,7 @@ class Heap extends Array {
 
         // Retorna o resultado desejado após retirada da raiz.
         if (this.heapIndex !== null) {
-            console.log(root)
+            // console.log(root)
             return root
         } else {
             return root[0]
