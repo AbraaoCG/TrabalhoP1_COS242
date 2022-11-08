@@ -148,34 +148,37 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
 
         // Marca a distância de todos os vértices como infinito ( em uma Heap ), os pais de cada vértice como indefinido e cria um vetor de explorados.
         // A heap uma subclasse de um Array do javascript, e o atributo "controlIndex" é um Array que guarda na posição 'v' o index da distância de v na Heap.
-        let dist = new Heap(this.n, true);
+        let distHeap = new Heap(this.n, true);
         let parent = new Array(this.n);
-        let exploitedArray = new Array(this.n);
+        let dist = new Array(this.n);
         for (let i = 0 ; i < this.n ; i++){
-            dist[i] = Infinity;
+            distHeap[i] = Infinity;
             parent[i] = undefined;
-            exploitedArray[i] = false;
+            dist[i] = Infinity;
+            distHeap.insert(Infinity);
+            distHeap.heapIndex[i] = i;
         };
         // insere o vertice inicial na raiz da Heap e define no vetor "dist.heapIndex" a posição do vertice inicial 's' na Heap.
-        dist[0] = 0;
-        dist.heapIndex[s - 1] = 0;
-        let u;
+        distHeap.changePriority(distHeap.heapIndex[s - 1], 0);
+
+        let u; // Vértice de maior prioridade
+        let dist_u; // Distância da origem de maior prioridade
         for (let i = 0 ; i < this.n ; i++) { // Itera-se em 'n', pois sabemos que todos os vértices serão selecionados como 'u' para serem explorados.
-            u = dist.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
-            exploitedArray[u] = true;
+            [dist_u, u] = distHeap.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
+            dist[u] = dist_u; // Após explorado, a distância de "s" à "u" não será alterada novamente
 
             let v = this.struct[u].head;
             let vIndex; // Varíavel que armazena vizinho 'v' de 'u'
             let edgeWeight; // Varíavel que armazena peso da aresta u - v.
-            let newPriority; // Varíavel que armazena a possível nova prioridade
             let heapIndexToChange; // Variável que armazena o possível índice que deverá ter sua prioridade alterada
             while(v != null) {
                 vIndex = v.data[0]; 
                 edgeWeight = v.data[1];
-                heapIndexToChange = dist.heapIndex[vIndex]
-                if (dist[heapIndexToChange] > (dist[u] + edgeWeight)) {
-                    newPriority = dist[u] + edgeWeight;
-                    dist.changePriority(heapIndexToChange, newPriority);
+                heapIndexToChange = distHeap.heapIndex[vIndex]; // Ponteiro de cada vértice na Heap. Retorna o índice da Heap para o vértice especificado
+                
+                // Se dist[v] for maior do que a dist[u] + w(u,v) , atualiza a chave dist[v] na Heap
+                if (distHeap[heapIndexToChange] > (dist_u + edgeWeight)) {   
+                    distHeap.changePriority(heapIndexToChange, dist_u + edgeWeight);
                     parent[vIndex] = u;
                 };
 
