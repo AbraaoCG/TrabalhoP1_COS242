@@ -5,7 +5,7 @@ class Heap extends Array {
         this.size = -1; 
         if (controlIndex !== null) {
             this.heapIndex = new Array(n);
-            this.rootIndex = null;
+            this.rootVertex = null;
         } else {
             this.heapIndex = null;
         };
@@ -27,7 +27,7 @@ class Heap extends Array {
     };
 
     shiftUp(i) {
-        while (i > 0 && this[this.parent(i)] > this[i]) {
+        while (i > 0 && this[this.parent(i)][0] > this[i][0] ) {
             // Swap parent and current node
             this.swap(this.parent(i), i);
             // Update i to parent of i
@@ -36,20 +36,20 @@ class Heap extends Array {
     };
 
     swap(i, j) {
+        if (this.heapIndex !== null) this.swapIndex(i, j);
+
         let temp = this[i];
         this[i] = this[j];
         this[j] = temp;
 
-        if (this.heapIndex !== null) this.swapIndex(i, j);
+        if (this.heapIndex[i] === 0) this.rootVertex = this[i][1]; // Matenho informação de quem é a raiz
+        if (this.heapIndex[j] === 0) this.rootVertex = this[j][1];
     };
 
-    swapIndex(i, j) {
-       // Guardamos o vértice da raiz, isto é, o índice onde o heapIndex é 0  // QUEREMOS SABER QUEM É O VÉRTICE QUE ESTÁ NO HEAP[0]
-       if (this.heapIndex[i] === 0) this.rootIndex = i;
-
-        let temp = this.heapIndex[i];
-        this.heapIndex[i] = this.heapIndex[j];
-        this.heapIndex[j] = temp;
+    swapIndex(i , j ) {
+       // Troca de posição no Array swapIndex.
+        this.heapIndex[this[i][1]] = j
+        this.heapIndex[this[j][1]] = i
     };
 
     // Function to shift down the node in order to maintain the heap property
@@ -59,14 +59,14 @@ class Heap extends Array {
         // Left Child
         let l = this.leftChild(i);
     
-        if (l <= this.size && this[l] < this[minIndex]) {
+        if (l <= this.size && this[l][0] < this[minIndex][0] ) {
             minIndex = l;
         };
     
         // Right Child
         let r = this.rightChild(i);
     
-        if (r <= this.size && this[r] < this[minIndex]) {
+        if (r <= this.size && this[r][0] < this[minIndex][0] ) {
             minIndex = r;
         };
     
@@ -81,7 +81,7 @@ class Heap extends Array {
     insert(p) {
         this.size ++;
         this[this.size] = p;
-    
+
         // Shift Up to maintain heap property
         this.shiftUp(this.size);
     };
@@ -89,27 +89,28 @@ class Heap extends Array {
     // Function to extract the element with minimum priority
     extractMin() {
         // Armazena para retornar posteriomente o peso da aresta de menor peso e qual aresta é essa.
-        let rootPriority = this[0];  
+        let root = this[0];
         
         // Deseja-se então, remover nó da raiz da Heap, fazendo uma substituição com o último peso da Heap e adequando-o à fila de prioridade (ShiftDown)
         this.swap(0, this.size);
         this.size = this.size - 1;
         this.length = this.length - 1;
-        if (this.heapIndex !== null) this.heapIndex.length = this.heapIndex.length - 1;
+        //if (this.heapIndex !== null) this.heapIndex.length = this.heapIndex.length - 1;
         this.shiftDown(0);
 
         // Retorna o resultado desejado após retirada da raiz.
         if (this.heapIndex !== null) {
-            return [rootPriority, this.rootIndex];
+            console.log(root)
+            return root
         } else {
-            return rootPriority;
+            return root[0]
         };
     };
 
     // Function to change the priority of an element
-    changePriority(i, p) {
-        let oldp = this[i];
-        this[i] = p;
+    changePriority( i, p) {
+        let oldp = this[i][0];
+        this[i][0] = p;
     
         if (p < oldp) {
             this.shiftUp(i);
@@ -120,19 +121,9 @@ class Heap extends Array {
 
     // Function to get value of the current maximum element
     getMin() {
-        return this[0];
+        return this[0][0];
     };
  
-    // Function to remove the element located at given index
-    remove(i) {
-        this[i] = this.getMin() + 1;
-    
-        // Shift the node to the root of the heap
-        this.shiftUp(i);
-    
-        // Extract the node
-        this.extractMax();
-    };
 };
 
 module.exports = Heap; // Export class

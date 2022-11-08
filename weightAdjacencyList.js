@@ -1,6 +1,6 @@
 const Heap = require('./heap');
 const WeightGraph = require('./weightGraph');
-const LinkedList = require('./linkedList');
+const LinkedList = require('./linkedList.js');
 
 class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
     constructor(inputPath) {
@@ -25,7 +25,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return [this.fillStruct, struct];
     };
 
-    getMin(exploitedArray, baseArray) {
+    getMin(exploitedArray, baseArray) { // Metodo auxiliar para percorrer "descobertos "
         let min = Infinity;
         let minIndex;
         for (let i = 0 ; i < this.n ; i++) {
@@ -37,28 +37,32 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return minIndex;
     };
 
-    dijkstra(s) {
-        if (this.negativeWeights) {
+    dijkstra_Vector(s) {
+        if (this.negativeWeights) { // Verifico se ha pesos negativos.
             throw 'Library does not yet implement shortest paths with negative weights'
         }
 
-        // Marca a distância de todos os vértices como infinito e os pais de cada vértice como indefinido
-        let dist = new Array(this.n);
+        // Marca a distância de todos os vértices como infinito, os pais de cada vértice como indefinido e a todos os vertices como nao explorados
+        let dist = new Heap(this.n);
         let parent = new Array(this.n);
         let exploitedArray = new Array(this.n);
+        let num_exploiteds = 0
         for (let i = 0 ; i < this.n ; i++){
             dist[i] = Infinity;
             parent[i] = undefined;
             exploitedArray[i] = false;
         };
-
+        // Distancia de s --> s  = 0
         dist[s - 1] = 0;
-        let u;
-        for (let i = 0 ; i < this.n ; i++) {
-            u = this.getMin(exploitedArray, dist);
-            exploitedArray[u] = true;
 
-            let v = this.struct[u].head;
+        let u;
+        //for (let i = 0 ; i < this.n ; i++) {
+        while (num_exploiteds != this.n){
+            u = dist.
+            exploitedArray[u] = true; 
+            num_exploiteds++
+
+            let v = this.struct[u].head; // Seleciono primeiro vizinho de u
             let vIndex;
             let edgeWeight;
             while(v != null){
@@ -68,7 +72,52 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
                     dist[vIndex] = dist[u] + edgeWeight;
                     parent[vIndex] = u;
                 };
+                v = v.next;
+            };
+        };
 
+        return [dist, parent];
+    };
+
+    dijkstra_Heap(s) {
+        if (this.negativeWeights) { // Verifico se ha pesos negativos.
+            throw 'Library does not yet implement shortest paths with negative weights'
+        }
+
+        // Marca a distância de todos os vértices como infinito, os pais de cada vértice como indefinido e a todos os vertices como nao explorados
+        let distHeap = new Heap(this.n, true);
+        let parent = new Array(this.n);
+        let dist = new Array(this.n);
+        
+        for (let i = 0 ; i < this.n ; i++){
+            parent[i] = undefined;
+            dist[i] = Infinity;
+            distHeap.insert([Infinity, i])
+            distHeap.heapIndex[i] = i;
+        };
+        // Distancia de s --> s  = 0
+        distHeap.changePriority(distHeap.heapIndex[s - 1], 0);
+
+        let u; // Vértice de maior prioridade
+        let dist_u; // Distância da origem de maior prioridade
+        for (let i = 0 ; i < this.n ; i++) { // Itera-se em 'n', pois sabemos que todos os vértices serão selecionados como 'u' para serem explorados.
+            [dist_u, u] = distHeap.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
+            dist[u] = dist_u;  // Após explorado, a distância de "s" à "u" não será alterada novamente
+            
+            let v = this.struct[u].head; // Seleciono primeiro vizinho de u
+            let vIndex; let edgeWeight; let heapIndexToChange; 
+
+            while(v != null){
+                if (dist[v.data[0]] === Infinity){ // Se ainda não foi explorado, descubro vizinho
+                    vIndex = v.data[0];
+                    edgeWeight = v.data[1];  
+                    heapIndexToChange = distHeap.heapIndex[vIndex];
+                    console.log(distHeap[heapIndexToChange][0] , dist_u + edgeWeight)
+                    if (distHeap[heapIndexToChange][0] > (dist_u + edgeWeight)) {
+                        distHeap.changePriority(heapIndexToChange, dist_u + edgeWeight);
+                        parent[vIndex] = u;
+                    };    
+                }
                 v = v.next;
             };
         };
@@ -88,7 +137,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
     };
 
     distAndMinimalPath(s) {
-        let [dist, parent] = this.dijkstra(s);
+        let [dist, parent] = this.dijkstra_Heap(s);
         let minimalPath;
         for (let i = 0 ; i < dist.length ; i++) {
             minimalPath = this.getMinimalPath(i, parent);
@@ -117,7 +166,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
             let edgeWeight;
             while(v != null){
                 vIndex = v.data[0];
-                edgeWeight = v.data[1];   
+                edgeWeight = v.data[1];
                 if (cost[vIndex] > edgeWeight && exploitedArray[vIndex] == false) {
                     cost[vIndex] = edgeWeight;
                     parent[vIndex] = u;
@@ -140,54 +189,6 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         };
         this.writeOutput([`Custo total: ${total}`]);
     }
-
-    dijkstraHeap(s) {
-        if (this.negativeWeights) {
-            throw 'Library does not yet implement shortest paths with negative weights'
-        }
-
-        // Marca a distância de todos os vértices como infinito ( em uma Heap ), os pais de cada vértice como indefinido e cria um vetor de explorados.
-        // A heap uma subclasse de um Array do javascript, e o atributo "controlIndex" é um Array que guarda na posição 'v' o index da distância de v na Heap.
-        let distHeap = new Heap(this.n, true);
-        let parent = new Array(this.n);
-        let dist = new Array(this.n);
-        for (let i = 0 ; i < this.n ; i++){
-            distHeap[i] = Infinity;
-            parent[i] = undefined;
-            dist[i] = Infinity;
-            distHeap.insert(Infinity);
-            distHeap.heapIndex[i] = i;
-        };
-        // insere o vertice inicial na raiz da Heap e define no vetor "dist.heapIndex" a posição do vertice inicial 's' na Heap.
-        distHeap.changePriority(distHeap.heapIndex[s - 1], 0);
-
-        let u; // Vértice de maior prioridade
-        let dist_u; // Distância da origem de maior prioridade
-        for (let i = 0 ; i < this.n ; i++) { // Itera-se em 'n', pois sabemos que todos os vértices serão selecionados como 'u' para serem explorados.
-            [dist_u, u] = distHeap.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
-            dist[u] = dist_u; // Após explorado, a distância de "s" à "u" não será alterada novamente
-
-            let v = this.struct[u].head;
-            let vIndex; // Varíavel que armazena vizinho 'v' de 'u'
-            let edgeWeight; // Varíavel que armazena peso da aresta u - v.
-            let heapIndexToChange; // Variável que armazena o possível índice que deverá ter sua prioridade alterada
-            while(v != null) {
-                vIndex = v.data[0]; 
-                edgeWeight = v.data[1];
-                heapIndexToChange = distHeap.heapIndex[vIndex]; // Ponteiro de cada vértice na Heap. Retorna o índice da Heap para o vértice especificado
-                
-                // Se dist[v] for maior do que a dist[u] + w(u,v) , atualiza a chave dist[v] na Heap
-                if (distHeap[heapIndexToChange] > (dist_u + edgeWeight)) {   
-                    distHeap.changePriority(heapIndexToChange, dist_u + edgeWeight);
-                    parent[vIndex] = u;
-                };
-
-                v = v.next;
-            };
-        };
-
-        return [dist, parent];
-    };
 };
 
 module.exports = WeightAdjacencyList; // Export class
