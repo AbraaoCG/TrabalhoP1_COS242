@@ -140,6 +140,8 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
 
     distAndMinimalPathHeap(s) {
         let [dist, parent] = this.dijkstraHeap(s); // Retorna array de distâncias até "s" e o array de pais usando dijkstra com Heap
+        console.log(" Algorítimo de Dijkstra executado, imprimindo as distâncias e caminhos mínimos em output.txt")
+
         let minimalPath;
         for (let i = 0 ; i < dist.length ; i++) { // Itera sobre todos os vértices do grafo imprimindo a distância e o caminho mínimo de "i" até "s"
             minimalPath = this.getMinimalPath(i, parent); // Calcula caminho mínimo de "i" até "s"
@@ -150,6 +152,8 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
 
     distAndMinimalPathVector(s) {
         let [dist, parent] = this.dijkstraVector(s); // Retorna array de distâncias até "s" e o array de pais usando dijkstra sem Heap
+        console.log(" Algorítimo de Dijkstra executado, imprimindo as distâncias e caminhos mínimos em output.txt")
+
         let minimalPath;
         for (let i = 0 ; i < dist.length ; i++) { // Itera sobre todos os vértices do grafo imprimindo a distância e o caminho mínimo de "i" até "s"
             minimalPath = this.getMinimalPath(i, parent); // Calcula caminho mínimo de "i" até "s"
@@ -201,7 +205,22 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         return [cost, parent];
     };
 
-    mst() {
+    mstNoOutput() { // Método mst vai computar a árvore geradora mínima, mas não vai imprimir a mst, apenas o custo total das arestas.
+
+        this.writeOutput(['--- Ouput MST ---']);
+        const [cost, parent] = this.prim(1); // Inicia o algoritmo de prim no vértice 1 (poderia iniciar por qualquer vértice para um grafo conexo)
+        let total = 0;
+        for (let i = 0 ; i < cost.length ; i++) { // Pula o vértice raiz porque não tem pai 
+            if (cost[i] !== Infinity && cost[i] !== 0) { // Não vai imprimir vértices com custo infinito (não estão na mesma componente conexa), nem a raiz (não tem pai)
+                total += cost[i]; // Soma o custo total da mst
+            };
+        };
+        this.writeOutput([`Custo total: ${total}`]);
+	console.log(`Custo total MST: ${total}`)
+    };
+
+    mst() { // Método mst vai computar a árvore geradora mínima, e vai imprimir a mst. A impressão no output.txt da mst aumenta o tempo de execução consideravelmente, então cria-se um método separado sem output.
+
         // Método para imprimir árvore geradora mínima (mst), que deve ser escrita em um arquivo (mesmo formato que um grafo), assim como seu peso total
         this.writeOutput(['--- Ouput MST ---']);
         const [cost, parent] = this.prim(1); // Inicia o algoritmo de prim no vértice 1 (poderia iniciar por qualquer vértice para um grafo conexo)
@@ -209,7 +228,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
         for (let i = 0 ; i < cost.length ; i++) { // Pula o vértice raiz porque não tem pai 
             if (cost[i] !== Infinity && cost[i] !== 0) { // Não vai imprimir vértices com custo infinito (não estão na mesma componente conexa), nem a raiz (não tem pai)
                 total += cost[i]; // Soma o custo total da mst
-                this.writeOutput([`${parent[i] + 1} ${i + 1} ${cost[i]}`]); // Imprime aresta da seguinte forma: pai de "i", "i", custo de "i"
+                this.writeOutput([`${parent[i] + 1} ${i + 1} ${cost[i]}`]); // Imprime aresta da seguinte forma: pai de "i", "i", custo de "i".
             };
         };
         this.writeOutput([`Custo total: ${total}`]);
