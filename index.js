@@ -1,15 +1,23 @@
 const WeightAdjacencyList = require('./weightAdjacencyList');
 const LinkedList = require('./linkedList');
-const input = 'grafo2_w.txt';
+const input = 'input.txt'; // endereco do grafo a ser analisado
 
 myGraph = new WeightAdjacencyList(input);
-//myGraph.dijkstraHeap(1);
 
+
+
+// Teste Mst
+myGraph.mst(1);
+
+
+
+// Teste de tempo médio para calcular distâncias comecando de ˋnumˋ  vertices aleatórios.
+ 
 let n = myGraph.n
 let s = 0;
-
+num = 20
 time_i = Date.now()
-for(x = 0; x < 100 ; x++) {
+for(x = 0; x < num ; x++) {
     s = Math.floor( Math.random() * n ) + 1 // Math random  = [0,1[
     
     //console.log(s)
@@ -18,16 +26,7 @@ for(x = 0; x < 100 ; x++) {
 }
 
 tTotal = ( Date.now() - time_i ) / 1000
-tMedio = tTotal / 100
-console.log(" tempo medio de execucao : ", tMedio , " s")
+tMedio = tTotal / num
+console.log(" tempo medio de execucao de ", num ," Dijkstraˋs : ", tMedio , " s")
 
-/*
-time_i = Date.now()
-distancias_sv = myGraph.distAndMinimalPathVector(10);
-tTotal = Date.now() - time_i
 
-for (v = 2; v <=6 ; v ++){
-    console.log(distancias_sv[(v * 10) - 1] ) 
-}
-console.log(" tempo de execucao : ", (tTotal / 1000 ) , " s")
-*/

@@ -5,7 +5,6 @@ class Heap extends Array {
         this.size = -1; 
         if (controlIndex !== null) {
             this.heapIndex = new Array(n);
-            this.rootVertex = null;
         } else {
             this.heapIndex = null;
         };
@@ -37,17 +36,14 @@ class Heap extends Array {
 
     swap(i, j) {
         if (this.heapIndex !== null) this.swapIndex(i, j);
-
         let temp = this[i];
         this[i] = this[j];
         this[j] = temp;
 
-        if (this.heapIndex[i] === 0) this.rootVertex = this[i][1]; // Matenho informação de quem é a raiz
-        if (this.heapIndex[j] === 0) this.rootVertex = this[j][1];
     };
 
     swapIndex(i , j ) {
-       // Troca de posição no Array swapIndex.
+       // Troca de posição no Array heapIndex --> Utiliza numeracao do vertice guardada na Heap
         this.heapIndex[this[i][1]] = j
         this.heapIndex[this[j][1]] = i
     };
@@ -93,9 +89,13 @@ class Heap extends Array {
         
         // Deseja-se então, remover nó da raiz da Heap, fazendo uma substituição com o último peso da Heap e adequando-o à fila de prioridade (ShiftDown)
         this.swap(0, this.size);
-        this.size = this.size - 1;
-        this.length = this.length - 1;
-        //if (this.heapIndex !== null) this.heapIndex.length = this.heapIndex.length - 1;
+        this.size = this.size - 1; // Diminui tamanho conhecido da heap
+
+	// A seguir, Diminui-se o tamanho da Heap em 1, economizando espaco. 
+	// Esse metodo foi testado no arquivo testLenght.js, provando que essa operacao
+	// no Array javascript é realizada em O (1) .
+        this.length = this.length - 1; 
+
         this.shiftDown(0);
 
         // Retorna o resultado desejado após retirada da raiz.

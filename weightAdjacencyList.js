@@ -100,8 +100,9 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
 
         let u; // Vértice de maior prioridade
         let dist_u; // Distância da origem de maior prioridade
-        while (distHeap[0] != undefined && distHeap[0][0] !== Infinity) { // No momento um vértice com distância infinita está na raiz, significa que a componente conexa terminou de ser analisada (conjunto descobertos acabou)
-            
+        while (distHeap[0] != undefined && distHeap[0][0] !== Infinity) { // No momento que um vértice com distância infinita está na raiz, significa que a componente conexa terminou de ser analisada (conjunto descobertos acabou)
+            // Além disso, se a raiz da Heap for undefined, significa que o grafo é conexo e todos os vértices foram explorados. 
+
 	    [dist_u, u] = distHeap.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
             dist[u] = dist_u;  // Após explorado, a distância de "s" à "u" não será alterada novamente
             
@@ -172,7 +173,9 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
 
         let u;
         let cost_u;
-        while (costHeap[0][0] !== Infinity) {
+        while ( costHeap[0] != undefined && costHeap[0][0] !== Infinity) {// No momento que um vértice com custo infinito está na raiz, significa que a componente conexa terminou de ser analisada (conjunto descobertos acabou)
+            // Além disso, se a raiz da Heap for undefined, significa que o grafo é conexo e todos os vértices foram explorados. 
+
             [cost_u, u] = costHeap.extractMin(); // Extrai a custo e o vértice raiz da Heap, ou seja, aquela que tem menor custo dentre as descobertas
             cost[u] = cost_u; // Define o custo definitivo do vértice "u" que será explorado
 
@@ -210,6 +213,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
             };
         };
         this.writeOutput([`Custo total: ${total}`]);
+	console.log(`Custo total MST: ${total}`)
     };
 };
 
