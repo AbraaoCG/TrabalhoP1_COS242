@@ -104,7 +104,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
             
 	    [dist_u, u] = distHeap.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
             dist[u] = dist_u;  // Após explorado, a distância de "s" à "u" não será alterada novamente
-            //console.log(u)
+            
             let v = this.struct[u].head; // Seleciono primeiro vizinho de u
             let vIndex; let edgeWeight; let heapIndexToChange; 
 
