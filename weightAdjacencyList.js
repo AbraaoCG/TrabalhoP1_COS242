@@ -100,10 +100,11 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
 
         let u; // Vértice de maior prioridade
         let dist_u; // Distância da origem de maior prioridade
-        while (distHeap[0][0] !== Infinity) { // No momento um vértice com distância infinita está na raiz, significa que a componente conexa terminou de ser analisada (conjunto descobertos acabou)
-            [dist_u, u] = distHeap.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
-            dist[u] = dist_u;  // Após explorado, a distância de "s" à "u" não será alterada novamente
+        while (distHeap[0] != undefined && distHeap[0][0] !== Infinity) { // No momento um vértice com distância infinita está na raiz, significa que a componente conexa terminou de ser analisada (conjunto descobertos acabou)
             
+	    [dist_u, u] = distHeap.extractMin(); // Extrai a menor distância na Heap, reordenando a Heap para manter a heap-order e também reordena o array heapIndex
+            dist[u] = dist_u;  // Após explorado, a distância de "s" à "u" não será alterada novamente
+            //console.log(u)
             let v = this.struct[u].head; // Seleciono primeiro vizinho de u
             let vIndex; let edgeWeight; let heapIndexToChange; 
 
@@ -112,9 +113,7 @@ class WeightAdjacencyList extends WeightGraph { // Classe Base para Grafos
                     vIndex = v.data[0];
                     edgeWeight = v.data[1];  
                     heapIndexToChange = distHeap.heapIndex[vIndex]; // índice na Heap referente ao vértice "v"
-                    if (vIndex === 47615) {
-                        console.log(vIndex);
-                    };
+                    
                     if (distHeap[heapIndexToChange][0] > (dist_u + edgeWeight)) {
                         distHeap.changePriority(heapIndexToChange, dist_u + edgeWeight);
                         parent[vIndex] = u;
