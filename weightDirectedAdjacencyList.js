@@ -148,12 +148,15 @@ class WeightDirectedAdjacencyList extends WeightGraph { // Classe base para graf
             // Lembrando também que ao atualizar a aresta original, preciso atualizar a reversa e vice-versa, isso será possível
             // através do quarto elemento do nó que é o ponteiro para a aresta original/reversa
             for (v = t - 1; v != s - 1; v = parent[v][0]) {
+		// A operação condicional a seguir não é essencial, pois as duas operações com a aresta do caminho e sua complementar
+		// (complementar da original é reversa e vice-versa) são idênticas. No entanto, realizamos mesmo assim para deixar
+		// claro o que está sendo feito em cada um dos casos:
                 if (parent[v][1].data[2]) { // Se w[2] vale "true", é aresta original
-                    parent[v][1].data[1] -= pathFlow; // Acesso aresta dentro do grafo residual e aumento o fluxo com o gargalo
+                    parent[v][1].data[1] -= pathFlow; // Acesso aresta dentro do grafo residual e diminuo capacida residual com o gargalo
                     parent[v][1].data[3].data[1] += pathFlow; // Acesso aresta dentro do grafo residual através do ponteiro e aumento o fluxo com o gargalo
                 } else { // Se w[2] vale "false", é aresta reversa
                     parent[v][1].data[1] -= pathFlow; // Acesso aresta dentro do grafo residual e diminuo o fluxo com o gargalo
-                    parent[v][1].data[3].data[1] += pathFlow; // Acesso aresta dentro do grafo residual através do ponteiro e diminuo o fluxo com o gargalo
+                    parent[v][1].data[3].data[1] += pathFlow; // Acesso aresta dentro do grafo residual através do ponteiro e aumento a capacidade residual com o gargalo
                 };
             };
 
