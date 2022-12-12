@@ -14,6 +14,7 @@ class LinkedList {
             this.last = this.last.next 
         }
         this.length++
+        return this.last;
     }
 }
 
