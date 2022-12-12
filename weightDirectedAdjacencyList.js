@@ -277,7 +277,7 @@ class WeightDirectedAdjacencyList extends WeightGraph { // Classe base para graf
 
         // O trabalho de disciplina requer que o algoritmo retorne o fluxo máximo e a alocação de fluxo, além de imprimir essa alocação
         if (writeOutput == true) {
-            this.writeOutput(`--- Output Ford-Fulkerson ---\nFluxo máximo = ${maxFlow}\n Array no formato`)
+            this.writeOutput(`--- Output Ford-Fulkerson ---\nFluxo máximo = ${maxFlow}\n`)
         };
 
         // Função retorna Array com 2 items: Fluxo máximo e Array com informação "v1 - v2 - fluxo"
